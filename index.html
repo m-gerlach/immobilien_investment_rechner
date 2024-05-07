@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Immobilien Investment Calculator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Plotly packages -->
+    <script src='https://cdn.plot.ly/plotly-2.31.1.min.js'></script>
+    <!-- Bootstrap 5 stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap 5 JS packages -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS packages -->
+    <script type="module" src="{{url_for('static', filename='main.js')}}"></script>
+  </head>
+  <body class="bg-dark text-white">
+
+    <nav class="navbar navbar-expand-sm bg-success navbar-success fixed-top">
+      <div class="container-fluid">
+        <!-- <a class="navbar-brand" href="#">Immobilieninvestitionsrechner</a> -->
+        <div class="navbar-brand">Immobilieninvestitionsrechner</div>
+        <div class="collapse navbar-collapse" id="navbar_selection">
+          <ul class="navbar-nav me-auto" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" data-bs-toggle="tab" href="#rendite_pro_eigenkapital">Rendite pro Eigenkapitalanteil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#einzelfallrechner">Einzellfall Renditerechner</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#darlehensrechner">Annuitätendarlehensrechner</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-bs-toggle="tab" href="#sollzinsverlauf">Sollzinsverlauf</a>
+            </li>
+          </ul>
+        </div> <!-- navbar_selection -->
+      </div>
+    </nav>
+
+    <div class="container pt-5">
+      <div id="outer_content_container" class="container">
+
+        <div class="tab-content">
+          <div id="rendite_pro_eigenkapital" class="container tab-pane active"><br>
+            <h3>Variable Nettorendite pro eingesetztem Eigenkapital</h3>
+
+            <form name="house_data_form" onsubmit="compute_return()" method="post">
+              <div class="row">
+                <div class="col-sm-8">
+                  <label for="netto_kaufpreis">Netto Kaufpreis:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="netto_kaufpreis" name="netto_kaufpreis" min="0" required="true" oninput="update()"> €
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="zusätzliche_modernisierungskosten">Zusätzliche Modernisierungskosten:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="zusätzliche_modernisierungskosten" name="zusätzliche_modernisierungskosten" min="0"> €
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="erwartete_jahreskaltsmiete">Erwartete Jahreskaltsmiete:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="erwartete_jahreskaltsmiete" name="erwartete_jahreskaltsmiete" min="0" required="true"> €
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="wohnfläche">Wohnfläche:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="wohnfläche" name="wohnfläche" min="0" required="true" oninput="update()"> m<sup>2</sup>
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="baujahr">Baujahr:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="baujahr" name="baujahr" min="0" oninput="update()">
+                </div>
+
+                <div class="col-sm-4">
+                  <label for="laufende_kosten_pro_jahr">Laufende Kosten pro Jahr:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="set_default_laufende_kosten_pro_jahr" name="set_default_laufende_kosten_pro_jahr" onchange="update()">
+                  <label for="set_default_laufende_kosten_pro_jahr">Automatisch füllen</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="laufende_kosten_pro_jahr" name="laufende_kosten_pro_jahr" min="0"> €
+                </div>
+
+                <div class="col-sm-8">
+                    <label for="finanzierungsdauer_in_jahren">Finanzierungsdauer:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="finanzierungsdauer_in_jahren" name="finanzierungsdauer_in_jahren" min="0" max="50"> Jahre
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="tilgungsrate_pro_jahr">Tilgungsrate pro Jahr:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="tilgungsrate_pro_jahr" name="tilgungsrate_pro_jahr" min="0" max="100"> %
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="rücklagen_enthalten_in_kaufpreis">Rücklagen (Enthalten im Kaufpreis):</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="rücklagen_enthalten_in_kaufpreis" name="rücklagen_enthalten_in_kaufpreis" min="0"> €
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="zusätzliche_enthaltente_werte_in_kaufpreis">Zusätzlich enthaltene Werte im Kaufpreis:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="zusätzliche_enthaltente_werte_in_kaufpreis" name="zusätzliche_enthaltente_werte_in_kaufpreis" min="0"> €
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="maklercourtage">Maklercourtage:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="maklercourtage" name="maklercourtage" min="0" max="100" step="0.01"> % vom Kaufpreis
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="notarkosten">Notarkosten:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="notarkosten" name="notarkosten" min="0" max="100" step="0.01"> % vom Kaufpreis
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="grunderwerbssteuersatz">Grunderwerbssteuersatz:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.01"> % vom Kaufpreis
+                </div>
+
+                <div class="col-sm-4">
+                  <label for="grund_und_bodenwert">Grund- und Bodenwert:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="set_default_grund_und_bodenwert" name="set_default_grund_und_bodenwert" onchange="update()">
+                  <label for="set_default_grund_und_bodenwert">Automatisch füllen</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="grund_und_bodenwert" name="grund_und_bodenwert" min="0"> €
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="gewerblich_vermietet">Gewerbliche Vermietung:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="gewerblich_vermietet" name="gewerblich_vermietet">
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="denkmalgeschützt">Denkmalgeschützt:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="denkmalgeschützt" name="denkmalgeschützt">
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="einkommenssteuersatz">Einkommenssteuersatz:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="einkommenssteuersatz" name="einkommenssteuersatz" min="0" max="100" step="0.01"> %
+                </div>
+
+                <div class="col-sm-8">
+                  <label for="erwerb_durch_vermögensverwaltende_körperschaft">Erwerb durch vermögensverwaltende Körperschaft (z.B. Stiftuung):</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="erwerb_durch_vermögensverwaltende_körperschaft" name="erwerb_durch_vermögensverwaltende_körperschaft">
+                </div>
+              </div>
+            </form>
+            <button class="btn btn-primary" onclick="compute_return()">Start</button>
+
+            <div id='rendite_div' class="mx-auto d-block" style="width:100%"><!-- Plotly chart will be drawn inside this DIV --></div>
+
+          </div>
+
+          <div id="einzelfallrechner" class="container tab-pane"><br>
+            <h3>Zeitlicher Verlauf für vorgegebenes Eigenkapital</h3>
+
+            <div id='rendite_zeitlicher_verlauf_div' class="mx-auto d-block" style="width:100%"><!-- Plotly chart will be drawn inside this DIV --></div>
+          </div> <!-- einzelfallrechner -->
+
+          <div id="darlehensrechner" class="container tab-pane"><br>
+            <h3>Rückzahlverlauf eines Annuitätendarlehen</h3>
+            <div id='darlehen_div'class="mx-auto d-block" style="width:100%" ><!-- Plotly chart will be drawn inside this DIV --></div>
+          </div> <!-- darlehensrechner -->
+
+          <div id="sollzinsverlauf" class="container tab-pane"><br>
+            <h3>Geschätzte aktuelle Sollzinsen pro Eigenkapitalanteil </h3>
+            <div id='zins_div' class="mx-auto d-block" style="width:100%"><!-- Plotly chart will be drawn inside this DIV --></div>
+          </div> <!-- sollzinsverlauf -->
+        </div> <!-- tab-content -->
+      </div> <!-- outer_content_container -->
+    </div>
+  </body>
+</html>
