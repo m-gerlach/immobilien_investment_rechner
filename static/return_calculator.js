@@ -36,6 +36,11 @@ export default class ReturnCalculator {
       },
       yaxis: {
         title: 'Zins in %',
+      },
+      paper_bgcolor: 'rgba(255,255,255, 0)',
+      plot_bgcolor: 'rgba(0,0,0,0.1)',
+      font: {
+        color: 'rgba(255,255,255,255)'
       }
     };
 
@@ -165,22 +170,30 @@ export default class ReturnCalculator {
    * Gesamter Cashflow pro Jahr inklusive Tilgungsrücklage am Ende der Finanzierungslaufzeit
    * @param {*} eigenkapital Eingebrachtes Eigenkapital in das Investment
    * @param {*} investitionsdauer Dauer der Investitionsbetrachtung in Jahren
+   * @return {*} JSON object mit dem jährlichen Verlauf und der finalen Rendite
    */
-  compute_rendite_pro_jahr_mit_variablem_eigenkapital(eigenkapital, investitionsdauer, shall_log_result){
+  compute_rendite_pro_jahr_mit_variablem_eigenkapital(eigenkapital, investitionsdauer){
+    // object which is returned at the end
+    var result = {
+      verlauf: [],
+      rendite_in_euro: 0
+    };
+
     var anschaffungspreis = this.compute_gesamt_anschaffungspreis();
 
     var finanzierungsvolumen = anschaffungspreis - eigenkapital;
     if(finanzierungsvolumen < 0)
     finanzierungsvolumen = 0;
 
-  const [sollzinstabelle, tilgungstabelle, restschulden] = this.compute_annuitätendarlehen_verlauf(
-    finanzierungsvolumen, investitionsdauer, this.zins_pro_eigenkapitalanteil(eigenkapital/this.input.netto_kaufpreis), this.input.tilgungsrate_pro_jahr/100.
-  );
+    const [sollzinstabelle, tilgungstabelle, restschulden] = this.compute_annuitätendarlehen_verlauf(
+      finanzierungsvolumen, investitionsdauer, this.zins_pro_eigenkapitalanteil(eigenkapital/this.input.netto_kaufpreis), this.input.tilgungsrate_pro_jahr/100.
+    );
 
     var mieteinkünfte_pro_jahr = (this.input.erwartete_jahreskaltsmiete - this.input.laufende_kosten_pro_jahr);
     var cashflow_pro_jahr = [];
     const abschreibbarer_gebäudewert = (anschaffungspreis - this.input.grund_und_bodenwert - this.input.rücklagen_enthalten_in_kaufpreis);
 
+    // Compute progress for each year individually
     for(var jahr in [...Array(investitionsdauer).keys()]) {
       var afa = abschreibbarer_gebäudewert * this.compute_abschreibung_in_prozent(jahr)/100.;
       var zu_versteuernder_gewinn = Math.round(mieteinkünfte_pro_jahr - sollzinstabelle[jahr] - afa);
@@ -199,34 +212,37 @@ export default class ReturnCalculator {
       var cashflow = Math.round(mieteinkünfte_pro_jahr - sollzinstabelle[jahr] - tilgungstabelle[jahr] - steuern + verlustvortragsgewinn)
       cashflow_pro_jahr.push(cashflow)
 
-      if(shall_log_result) {
-        console.log("Jahr " + jahr + ":")
-        console.log("Einnahmen durch V&V: " + Math.round(mieteinkünfte_pro_jahr) + "€")
-        console.log("Finanzierungskosten: " + Math.round(sollzinstabelle[jahr]) + "€")
-        console.log("Tilgungskosten: " + Math.round(tilgungstabelle[jahr]) + "€")
-        console.log("---------------")
-        console.log("Zu versteuernder Überschuss: " + Math.round(mieteinkünfte_pro_jahr - sollzinstabelle[jahr]) + "€")
-        console.log("AfA: " + Math.round(afa) + "€")
-        console.log("Steuerlicher Gewinn: " + zu_versteuernder_gewinn + "€ ")
-        console.log("Steuerersparnis der Hauptberuflichkeit: " + verlustvortragsgewinn + "€")
-        if( (mieteinkünfte_pro_jahr - sollzinstabelle[jahr] - tilgungstabelle[jahr]) == 0)
-          console.log("Steuerabzug: " + steuern + "€ (0%)")
-        else
-        console.log("Steuerabzug: " + steuern + "€ (" + 100 * steuern/(mieteinkünfte_pro_jahr - sollzinstabelle[jahr] - tilgungstabelle[jahr]) + "%)")
-        console.log("---------------")
-        console.log("Cashflow: " + cashflow + "€")
-      }
+      // Save yearly details in return object
+      var jahres_verlauf = {
+        "jahr": jahr,
+        "v_und_v_einnahmen": Math.round(mieteinkünfte_pro_jahr),
+        "finanzierungskosten": Math.round(sollzinstabelle[jahr]),
+        "tilgungskosten": Math.round(tilgungstabelle[jahr]),
+        "zu_versteuernder_überschuss": Math.round(mieteinkünfte_pro_jahr - sollzinstabelle[jahr]),
+        "afa": Math.round(afa),
+        "steuerlicher_gewinn": zu_versteuernder_gewinn ,
+        "steuerabzug": steuern,
+        "steuerersparnis_aus_hauptberuflichkeit": verlustvortragsgewinn,
+        "cashflow": + cashflow,
+      };
+
+      if( (mieteinkünfte_pro_jahr - sollzinstabelle[jahr] - tilgungstabelle[jahr]) == 0)
+        jahres_verlauf["steuerabzug_prozentual"] = 0;
+      else
+        jahres_verlauf["steuerabzug_prozentual"] = 100 * steuern/(mieteinkünfte_pro_jahr - sollzinstabelle[jahr] - tilgungstabelle[jahr]);
+
+      result.verlauf.push(jahres_verlauf);
     }
 
-    if(shall_log_result) {
-      console.log("Anschaffungskosten entsprechen " + this.compute_gesamt_anschaffungspreis()/this.input.erwartete_jahreskaltsmiete + " Jahreskaltmieten.")
-      console.log("Restschulden nach " + investitionsdauer + " Jahren: " + Math.round(restschulden) + "€")
-      console.log("Gesamtanschaffungskosten: " + this.compute_gesamt_anschaffungspreis() + "€")
-      console.log("Eingebrachtes Kapital: " + eigenkapital + "€")
-      console.log("Cashflow in " + investitionsdauer + " Jahren: " + Math.round(this.sum(cashflow_pro_jahr)) + "€ = " + 100*this.sum(cashflow_pro_jahr)/eigenkapital/investitionsdauer + "% p.a.")
-    }
+    result["anschaffungspreis_in_jahreskaltmieten"] = Math.round(this.compute_gesamt_anschaffungspreis()/this.input.erwartete_jahreskaltsmiete);
+    result["investitionsdauer_in_jahren"] = investitionsdauer;
+    result["restschulden"] = Math.round(restschulden);
+    result["gesamtanschaffungskosten"] = this.compute_gesamt_anschaffungspreis();
+    result["eigenkapital"] = eigenkapital;
+    result["cashflow_pa_absolut"] = Math.round(this.sum(cashflow_pro_jahr));
+    result["cashflow_pa_relativ"] = 100*this.sum(cashflow_pro_jahr)/eigenkapital/investitionsdauer;
 
-    return this.sum(cashflow_pro_jahr)/eigenkapital/investitionsdauer
+    return result;
   }
 
 
@@ -234,22 +250,32 @@ export default class ReturnCalculator {
    * Berechne die erwartete Nettorendite bei gegebenem input und variablem Eigenkapital
   */
   plot_net_return_for_variable_eigenkapital() {
-    // this.compute_rendite_pro_jahr_mit_variablem_eigenkapital(10000, 10, true);
-
     var rendite_tabelle = [];
     var eigenkapital_tabelle = [];
+    var max_rendite = -1000;
+    var max_details = {};
+
     for(var i=0; i<100; i++){
       const eigenkapital = this.compute_gesamt_anschaffungspreis() * (i/100.);
-      const rendite = 100*this.compute_rendite_pro_jahr_mit_variablem_eigenkapital(eigenkapital, this.input.finanzierungsdauer_in_jahren, false);
+      const details = this.compute_rendite_pro_jahr_mit_variablem_eigenkapital(eigenkapital, this.input.finanzierungsdauer_in_jahren);
+      const rendite = details.cashflow_pa_relativ;
 
       eigenkapital_tabelle.push(eigenkapital);
       rendite_tabelle.push(rendite);
+
+      if(rendite > max_rendite) {
+        max_rendite = rendite;
+        max_details = details;
+      }
     }
 
     var trace = {
       x: eigenkapital_tabelle,
       y: rendite_tabelle,
-      type: 'lines'
+      type: 'lines',
+      line: {
+        width: 3
+      }
     };
 
     var layout = {
@@ -261,10 +287,21 @@ export default class ReturnCalculator {
         title: 'Rendite p.a. in %',
         range: [-1, Math.max(...rendite_tabelle)+5],
         autorange: false
+      },
+      paper_bgcolor: 'rgba(255,255,255, 0)',
+      plot_bgcolor: 'rgba(0,0,0,0.1)',
+      font: {
+        color: 'rgba(255,255,255,255)'
       }
     };
 
     Plotly.newPlot('rendite_div', [trace], layout);
+    document.getElementById("rendite_pro_eigenkapital_rendite_maximum").innerHTML = Number(max_rendite).toLocaleString('de-DE', { maximumFractionDigits: 1}) + "%";
+    document.getElementById("rendite_pro_eigenkapital_rendite_maximum_eigenkapital").innerHTML = Number(max_details["eigenkapital"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("rendite_pro_eigenkapital_anschaffungspreis_in_jahreskaltmieten").innerHTML = Number(max_details["anschaffungspreis_in_jahreskaltmieten"]).toLocaleString('de-DE', { maximumFractionDigits: 1}) + " Jahreskaltmieten";
+    document.getElementById("rendite_pro_eigenkapital_restschulden").innerHTML = Number(max_details["restschulden"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("rendite_pro_eigenkapital_gesamtanschaffungskosten").innerHTML = Number(max_details["gesamtanschaffungskosten"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("rendite_pro_eigenkapital_result").style.display = '';
   }
 
   /**
@@ -302,9 +339,45 @@ export default class ReturnCalculator {
       },
       yaxis: {
         title: 'Rückzahlrate in %',
+      },
+      paper_bgcolor: 'rgba(255,255,255, 0)',
+      plot_bgcolor: 'rgba(0,0,0,0.1)',
+      font: {
+        color: 'rgba(255,255,255,255)'
       }
     };
 
     Plotly.newPlot('darlehen_div', [zinsen, tilgung], layout);
+  }
+
+  /**
+   * Berechne und zeige den jährlichen Verlauf eines konkreten Investments
+   */
+  display_timeline_for_fixed_eigenkapital() {
+    const details = this.compute_rendite_pro_jahr_mit_variablem_eigenkapital(this.input.eigenkapital, this.input.finanzierungsdauer_in_jahren);
+
+    document.getElementById("einzelfallrechner_anschaffungspreis_in_jahreskaltmieten").innerHTML = Number(details["anschaffungspreis_in_jahreskaltmieten"]).toLocaleString('de-DE', { maximumFractionDigits: 1}) + " Jahreskaltmieten";
+    document.getElementById("einzelfallrechner_restschulden").innerHTML = Number(details["restschulden"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("einzelfallrechner_gesamtanschaffungskosten").innerHTML = Number(details["gesamtanschaffungskosten"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("einzelfallrechner_result").style.display = '';
+
+    var verlauf_content = ""
+
+    for(var year in details.verlauf) {
+      verlauf_content += "<tr>";
+      verlauf_content += "<td>" + Number(year).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "</td>"
+      verlauf_content += "<td>" + Number(details.verlauf[year]["v_und_v_einnahmen"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€</td>"
+      verlauf_content += "<td>" + Number(details.verlauf[year]["finanzierungskosten"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€</td>"
+      verlauf_content += "<td>" + Number(details.verlauf[year]["tilgungskosten"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€</td>"
+      verlauf_content += "<td>" + Number(details.verlauf[year]["zu_versteuernder_überschuss"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€</td>"
+      verlauf_content += "<td>" + Number(details.verlauf[year]["afa"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€</td>"
+      verlauf_content += "<td>" + Number(details.verlauf[year]["steuerlicher_gewinn"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€</td>"
+      verlauf_content += "<td>" + Number(details.verlauf[year]["steuerabzug"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€</td>"
+      verlauf_content += "<td>" + Number(details.verlauf[year]["steuerersparnis_aus_hauptberuflichkeit"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€</td>"
+      verlauf_content += "<td>" + Number(details.verlauf[year]["cashflow"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€</td>"
+      verlauf_content += "</tr>";
+    }
+
+    document.getElementById("einzelfallrechner_verlauf").innerHTML = verlauf_content;
   }
 }
