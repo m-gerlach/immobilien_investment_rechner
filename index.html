@@ -4,6 +4,7 @@
     <title>Immobilien Investment Calculator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
     <!-- Plotly packages -->
     <script src='https://cdn.plot.ly/plotly-2.31.1.min.js'></script>
     <!-- Bootstrap 5 stylesheet -->
@@ -58,14 +59,14 @@
                   <label for="zusätzliche_modernisierungskosten">Zusätzliche Modernisierungskosten:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="zusätzliche_modernisierungskosten" name="zusätzliche_modernisierungskosten" min="0"> €
+                  <input type="number" id="zusätzliche_modernisierungskosten" name="zusätzliche_modernisierungskosten" min="0" oninput="update_rendite_pro_eigenkapital()> €
                 </div>
 
                 <div class="col-sm-8">
                   <label for="erwartete_jahreskaltsmiete">Erwartete Jahreskaltsmiete:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="erwartete_jahreskaltsmiete" name="erwartete_jahreskaltsmiete" min="0" required="true"> €
+                  <input type="number" id="erwartete_jahreskaltsmiete" name="erwartete_jahreskaltsmiete" min="0" required="true" oninput="update_rendite_pro_eigenkapital()> €
                 </div>
 
                 <div class="col-sm-8">
@@ -90,56 +91,56 @@
                   <label for="set_default_laufende_kosten_pro_jahr">Automatisch füllen</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="laufende_kosten_pro_jahr" name="laufende_kosten_pro_jahr" min="0"> €
+                  <input type="number" id="laufende_kosten_pro_jahr" name="laufende_kosten_pro_jahr" min="0" oninput="update_rendite_pro_eigenkapital()> €
                 </div>
 
                 <div class="col-sm-8">
                     <label for="finanzierungsdauer_in_jahren">Finanzierungsdauer:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="finanzierungsdauer_in_jahren" name="finanzierungsdauer_in_jahren" min="0" max="50"> Jahre
+                  <input type="number" id="finanzierungsdauer_in_jahren" name="finanzierungsdauer_in_jahren" min="0" max="50" oninput="update_rendite_pro_eigenkapital()> Jahre
                 </div>
 
                 <div class="col-sm-8">
                   <label for="tilgungsrate_pro_jahr">Tilgungsrate pro Jahr:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="tilgungsrate_pro_jahr" name="tilgungsrate_pro_jahr" min="0" max="100"> %
+                  <input type="number" id="tilgungsrate_pro_jahr" name="tilgungsrate_pro_jahr" min="0" max="100" oninput="update_rendite_pro_eigenkapital()> %
                 </div>
 
                 <div class="col-sm-8">
                   <label for="rücklagen_enthalten_in_kaufpreis">Rücklagen (Enthalten im Kaufpreis):</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="rücklagen_enthalten_in_kaufpreis" name="rücklagen_enthalten_in_kaufpreis" min="0"> €
+                  <input type="number" id="rücklagen_enthalten_in_kaufpreis" name="rücklagen_enthalten_in_kaufpreis" min="0" oninput="update_rendite_pro_eigenkapital()> €
                 </div>
 
                 <div class="col-sm-8">
                   <label for="zusätzliche_enthaltente_werte_in_kaufpreis">Zusätzlich enthaltene Werte im Kaufpreis:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="zusätzliche_enthaltente_werte_in_kaufpreis" name="zusätzliche_enthaltente_werte_in_kaufpreis" min="0"> €
+                  <input type="number" id="zusätzliche_enthaltente_werte_in_kaufpreis" name="zusätzliche_enthaltente_werte_in_kaufpreis" min="0" oninput="update_rendite_pro_eigenkapital()> €
                 </div>
 
                 <div class="col-sm-8">
                   <label for="maklercourtage">Maklercourtage:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="maklercourtage" name="maklercourtage" min="0" max="100" step="0.01"> % vom Kaufpreis
+                  <input type="number" id="maklercourtage" name="maklercourtage" min="0" max="100" step="0.01" oninput="update_rendite_pro_eigenkapital()> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-8">
                   <label for="notarkosten">Notarkosten:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="notarkosten" name="notarkosten" min="0" max="100" step="0.01"> % vom Kaufpreis
+                  <input type="number" id="notarkosten" name="notarkosten" min="0" max="100" step="0.01" oninput="update_rendite_pro_eigenkapital()> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-8">
                   <label for="grunderwerbssteuersatz">Grunderwerbssteuersatz:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.01"> % vom Kaufpreis
+                  <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.01" oninput="update_rendite_pro_eigenkapital()> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-4">
@@ -150,35 +151,35 @@
                   <label for="set_default_grund_und_bodenwert">Automatisch füllen</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="grund_und_bodenwert" name="grund_und_bodenwert" min="0"> €
+                  <input type="number" id="grund_und_bodenwert" name="grund_und_bodenwert" min="0" oninput="update_rendite_pro_eigenkapital()> €
                 </div>
 
                 <div class="col-sm-8">
                   <label for="gewerblich_vermietet">Gewerbliche Vermietung:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="checkbox" id="gewerblich_vermietet" name="gewerblich_vermietet">
+                  <input type="checkbox" id="gewerblich_vermietet" name="gewerblich_vermietet" onchange="update_rendite_pro_eigenkapital()>
                 </div>
 
                 <div class="col-sm-8">
                   <label for="denkmalgeschützt">Denkmalgeschützt:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="checkbox" id="denkmalgeschützt" name="denkmalgeschützt">
+                  <input type="checkbox" id="denkmalgeschützt" name="denkmalgeschützt" onchange="update_rendite_pro_eigenkapital()>
                 </div>
 
                 <div class="col-sm-8">
                   <label for="einkommenssteuersatz">Einkommenssteuersatz:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="einkommenssteuersatz" name="einkommenssteuersatz" min="0" max="100" step="0.01"> %
+                  <input type="number" id="einkommenssteuersatz" name="einkommenssteuersatz" min="0" max="100" step="0.01" oninput="update_rendite_pro_eigenkapital()> %
                 </div>
 
                 <div class="col-sm-8">
                   <label for="erwerb_durch_vermögensverwaltende_körperschaft">Erwerb durch vermögensverwaltende Körperschaft (z.B. Stiftung):</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="checkbox" id="erwerb_durch_vermögensverwaltende_körperschaft" name="erwerb_durch_vermögensverwaltende_körperschaft">
+                  <input type="checkbox" id="erwerb_durch_vermögensverwaltende_körperschaft" name="erwerb_durch_vermögensverwaltende_körperschaft" onchange="update_rendite_pro_eigenkapital()>
                 </div>
               </div>
             </form>
@@ -258,14 +259,14 @@
                   <label for="zusätzliche_modernisierungskosten">Zusätzliche Modernisierungskosten:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="zusätzliche_modernisierungskosten" name="zusätzliche_modernisierungskosten" min="0"> €
+                  <input type="number" id="zusätzliche_modernisierungskosten" name="zusätzliche_modernisierungskosten" min="0" oninput="update_einzelfallrechner()> €
                 </div>
 
                 <div class="col-sm-8">
                   <label for="erwartete_jahreskaltsmiete">Erwartete Jahreskaltsmiete:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="erwartete_jahreskaltsmiete" name="erwartete_jahreskaltsmiete" min="0" required="true"> €
+                  <input type="number" id="erwartete_jahreskaltsmiete" name="erwartete_jahreskaltsmiete" min="0" required="true" oninput="update_einzelfallrechner()> €
                 </div>
 
                 <div class="col-sm-8">
@@ -290,56 +291,56 @@
                   <label for="set_default_laufende_kosten_pro_jahr">Automatisch füllen</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="laufende_kosten_pro_jahr" name="laufende_kosten_pro_jahr" min="0"> €
+                  <input type="number" id="laufende_kosten_pro_jahr" name="laufende_kosten_pro_jahr" min="0" oninput="update_einzelfallrechner()> €
                 </div>
 
                 <div class="col-sm-8">
                     <label for="finanzierungsdauer_in_jahren">Finanzierungsdauer:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="finanzierungsdauer_in_jahren" name="finanzierungsdauer_in_jahren" min="0" max="50"> Jahre
+                  <input type="number" id="finanzierungsdauer_in_jahren" name="finanzierungsdauer_in_jahren" min="0" max="50" oninput="update_einzelfallrechner()> Jahre
                 </div>
 
                 <div class="col-sm-8">
                   <label for="tilgungsrate_pro_jahr">Tilgungsrate pro Jahr:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="tilgungsrate_pro_jahr" name="tilgungsrate_pro_jahr" min="0" max="100"> %
+                  <input type="number" id="tilgungsrate_pro_jahr" name="tilgungsrate_pro_jahr" min="0" max="100" oninput="update_einzelfallrechner()> %
                 </div>
 
                 <div class="col-sm-8">
                   <label for="rücklagen_enthalten_in_kaufpreis">Rücklagen (Enthalten im Kaufpreis):</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="rücklagen_enthalten_in_kaufpreis" name="rücklagen_enthalten_in_kaufpreis" min="0"> €
+                  <input type="number" id="rücklagen_enthalten_in_kaufpreis" name="rücklagen_enthalten_in_kaufpreis" min="0" oninput="update_einzelfallrechner()> €
                 </div>
 
                 <div class="col-sm-8">
                   <label for="zusätzliche_enthaltente_werte_in_kaufpreis">Zusätzlich enthaltene Werte im Kaufpreis:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="zusätzliche_enthaltente_werte_in_kaufpreis" name="zusätzliche_enthaltente_werte_in_kaufpreis" min="0"> €
+                  <input type="number" id="zusätzliche_enthaltente_werte_in_kaufpreis" name="zusätzliche_enthaltente_werte_in_kaufpreis" min="0" oninput="update_einzelfallrechner()> €
                 </div>
 
                 <div class="col-sm-8">
                   <label for="maklercourtage">Maklercourtage:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="maklercourtage" name="maklercourtage" min="0" max="100" step="0.01"> % vom Kaufpreis
+                  <input type="number" id="maklercourtage" name="maklercourtage" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-8">
                   <label for="notarkosten">Notarkosten:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="notarkosten" name="notarkosten" min="0" max="100" step="0.01"> % vom Kaufpreis
+                  <input type="number" id="notarkosten" name="notarkosten" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-8">
                   <label for="grunderwerbssteuersatz">Grunderwerbssteuersatz:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.01"> % vom Kaufpreis
+                  <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-4">
@@ -350,35 +351,35 @@
                   <label for="set_default_grund_und_bodenwert">Automatisch füllen</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="grund_und_bodenwert" name="grund_und_bodenwert" min="0"> €
+                  <input type="number" id="grund_und_bodenwert" name="grund_und_bodenwert" min="0" oninput="update_einzelfallrechner()> €
                 </div>
 
                 <div class="col-sm-8">
                   <label for="gewerblich_vermietet">Gewerbliche Vermietung:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="checkbox" id="gewerblich_vermietet" name="gewerblich_vermietet">
+                  <input type="checkbox" id="gewerblich_vermietet" name="gewerblich_vermietet" onchange="update_einzelfallrechner()>
                 </div>
 
                 <div class="col-sm-8">
                   <label for="denkmalgeschützt">Denkmalgeschützt:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="checkbox" id="denkmalgeschützt" name="denkmalgeschützt">
+                  <input type="checkbox" id="denkmalgeschützt" name="denkmalgeschützt" onchange="update_einzelfallrechner()>
                 </div>
 
                 <div class="col-sm-8">
                   <label for="einkommenssteuersatz">Einkommenssteuersatz:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="einkommenssteuersatz" name="einkommenssteuersatz" min="0" max="100" step="0.01"> %
+                  <input type="number" id="einkommenssteuersatz" name="einkommenssteuersatz" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()> %
                 </div>
 
                 <div class="col-sm-8">
                   <label for="erwerb_durch_vermögensverwaltende_körperschaft">Erwerb durch vermögensverwaltende Körperschaft (z.B. Stiftung):</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="checkbox" id="erwerb_durch_vermögensverwaltende_körperschaft" name="erwerb_durch_vermögensverwaltende_körperschaft">
+                  <input type="checkbox" id="erwerb_durch_vermögensverwaltende_körperschaft" name="erwerb_durch_vermögensverwaltende_körperschaft" onchange="update_einzelfallrechner()>
                 </div>
               </div>
             </form>
