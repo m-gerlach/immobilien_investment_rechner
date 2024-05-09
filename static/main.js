@@ -28,3 +28,21 @@ window.compute_einzelfall = function() {
   const return_calculator = new ReturnCalculator(input);
   return_calculator.display_timeline_for_fixed_eigenkapital();
 }
+
+// make `prepare_rendite_pro_eigenkapital()` function available in HTML
+window.prepare_rendite_pro_eigenkapital = function() {
+  Plotly.Plots.resize('rendite_div');
+}
+
+// make `prepare_einzelfallrechner()` function available in HTML
+window.prepare_einzelfallrechner = function() {}
+
+// make `prepare_sollzinsverlauf()` function available in HTML
+window.prepare_sollzinsverlauf = function() {
+  Plotly.Plots.resize('zins_div');
+}
+
+// make `prepare_darlehensrechner()` function available in HTML
+window.prepare_darlehensrechner = function() {
+  Plotly.Plots.resize('darlehen_div');
+}

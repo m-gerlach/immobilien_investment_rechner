@@ -41,10 +41,11 @@ export default class ReturnCalculator {
       plot_bgcolor: 'rgba(0,0,0,0.1)',
       font: {
         color: 'rgba(255,255,255,255)'
-      }
+      },
+      autosize: true,
     };
 
-    Plotly.newPlot('zins_div', [trace], layout);
+    Plotly.newPlot('zins_div', [trace], layout, {responsive: true});
   }
 
   /**
@@ -292,10 +293,12 @@ export default class ReturnCalculator {
       plot_bgcolor: 'rgba(0,0,0,0.1)',
       font: {
         color: 'rgba(255,255,255,255)'
-      }
+      },
+      autosize: true,
     };
 
-    Plotly.newPlot('rendite_div', [trace], layout);
+    Plotly.newPlot('rendite_div', [trace], layout, {responsive: true});
+    Plotly.Plots.resize('rendite_div');
     document.getElementById("rendite_pro_eigenkapital_rendite_maximum").innerHTML = Number(max_rendite).toLocaleString('de-DE', { maximumFractionDigits: 1}) + "%";
     document.getElementById("rendite_pro_eigenkapital_rendite_maximum_eigenkapital").innerHTML = Number(max_details["eigenkapital"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
     document.getElementById("rendite_pro_eigenkapital_anschaffungspreis_in_jahreskaltmieten").innerHTML = Number(max_details["anschaffungspreis_in_jahreskaltmieten"]).toLocaleString('de-DE', { maximumFractionDigits: 1}) + " Jahreskaltmieten";
@@ -344,10 +347,11 @@ export default class ReturnCalculator {
       plot_bgcolor: 'rgba(0,0,0,0.1)',
       font: {
         color: 'rgba(255,255,255,255)'
-      }
+      },
+      autosize: true,
     };
 
-    Plotly.newPlot('darlehen_div', [zinsen, tilgung], layout);
+    Plotly.newPlot('darlehen_div', [zinsen, tilgung], layout, {responsive: true});
   }
 
   /**

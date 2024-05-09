@@ -17,23 +17,25 @@
   </head>
   <body class="bg-dark text-white">
 
-    <nav class="navbar navbar-expand-sm bg-success navbar-success fixed-top" style="min-height: 5vh">
+    <nav class="navbar navbar-expand-lg bg-success navbar-success fixed-top" style="min-height: 5vh">
       <div class="container-fluid">
-        <!-- <a class="navbar-brand" href="#">Immobilieninvestitionsrechner</a> -->
         <div class="navbar-brand">Immobilieninvestitionsrechner</div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar_selection">
+          <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbar_selection">
           <ul class="navbar-nav me-auto" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" data-bs-toggle="tab" href="#rendite_pro_eigenkapital">Rendite pro Eigenkapitalanteil</a>
+              <a class="nav-link active" data-bs-toggle="tab" href="#rendite_pro_eigenkapital" onclick='prepare_rendite_pro_eigenkapital()'>Rendite pro Eigenkapitalanteil</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="tab" href="#einzelfallrechner">Einzellfall Renditerechner</a>
+              <a class="nav-link" data-bs-toggle="tab" href="#einzelfallrechner" onclick='prepare_einzelfallrechner()'>Einzellfall Renditerechner</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="tab" href="#darlehensrechner">Annuitätendarlehensrechner</a>
+              <a class="nav-link" data-bs-toggle="tab" href="#darlehensrechner" onclick='prepare_darlehensrechner()'>Annuitätendarlehensrechner</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" data-bs-toggle="tab" href="#sollzinsverlauf">Sollzinsverlauf</a>
+              <a class="nav-link" data-bs-toggle="tab" href="#sollzinsverlauf" onclick='prepare_sollzinsverlauf()'>Sollzinsverlauf</a>
             </li>
           </ul>
         </div> <!-- navbar_selection -->
@@ -191,7 +193,7 @@
               <hr>
 
               <h3>Ergebnis</h3>
-              <div id='rendite_div' class="mx-auto d-block" style="width:100%; margin: 20px"><!-- Plotly chart will be drawn inside this DIV --></div>
+              <div id='rendite_div' class="mx-auto d-block" style="margin: 20px; max-width: 70vh;"><!-- Plotly chart will be drawn inside this DIV --></div>
 
               <hr>
 
@@ -441,12 +443,12 @@
 
           <div id="darlehensrechner" class="container tab-pane"><br>
             <h3>Rückzahlverlauf eines Annuitätendarlehen</h3>
-            <div id='darlehen_div'class="mx-auto d-block" style="width:100%" ><!-- Plotly chart will be drawn inside this DIV --></div>
+            <div id='darlehen_div' class="mx-auto d-block" style="margin: 20px; max-width: 70vh;"><!-- Plotly chart will be drawn inside this DIV --></div>
           </div> <!-- darlehensrechner -->
 
           <div id="sollzinsverlauf" class="container tab-pane"><br>
             <h3>Geschätzte aktuelle Sollzinsen pro Eigenkapitalanteil </h3>
-            <div id='zins_div' class="mx-auto d-block" style="width:100%"><!-- Plotly chart will be drawn inside this DIV --></div>
+            <div id='zins_div' class="mx-auto d-block" style="margin: 20px; max-width: 70vh;"><!-- Plotly chart will be drawn inside this DIV --></div>
           </div> <!-- sollzinsverlauf -->
         </div> <!-- tab-content -->
       </div> <!-- outer_content_container -->
