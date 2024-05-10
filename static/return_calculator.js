@@ -1,4 +1,4 @@
-// import Input from "./input";
+import SollzinsRechner from "./sollzinsrechner.js";
 
 export default class ReturnCalculator {
   /**
@@ -10,18 +10,11 @@ export default class ReturnCalculator {
   }
 
   /**
-   * @return Extrapolierter Verlauf zwischen Anteil vom Eigenkapital am Netto-Kaufpreis und effektiver Sollzins.
-  */
-  zins_pro_eigenkapitalanteil(eigenkapitalanteil) {
-    return 0.02659689753649553 * Math.exp( 0.1934918614657533 /(eigenkapitalanteil + 0.22856910809757086));
-  }
-
-  /**
    * Plotte `zins_pro_eigenkapitalanteil()` und zeige das Ergebnis.
    */
   plot_zins_pro_eigenkapitalanteil() {
     var x = Array.from(new Array(100), (x, i) => 0+0.01*i);
-    var y = x.map(this.zins_pro_eigenkapitalanteil).map((i) => 100*i)
+    var y = x.map(SollzinsRechner.zins_pro_eigenkapitalanteil).map((i) => 100*i)
 
     var trace = {
       x: x,
@@ -95,7 +88,7 @@ export default class ReturnCalculator {
         // Tilgung steigt beim Annuitätendarlehen, da der rückgezahlte Betrag konstant ist
         const tilgung = (rückzahl_betrag - restschulden * zinssatz);
         tilgungstabelle.push(tilgung);
-        restschulden = restschulden - tilgung;
+        restschulden = Math.max(restschulden - tilgung, 0);
       }
       else {
         // Nachdem alle Schulden beglichen sind, verschwinden die Aufwände
@@ -171,9 +164,10 @@ export default class ReturnCalculator {
    * Gesamter Cashflow pro Jahr inklusive Tilgungsrücklage am Ende der Finanzierungslaufzeit
    * @param {*} eigenkapital Eingebrachtes Eigenkapital in das Investment
    * @param {*} investitionsdauer Dauer der Investitionsbetrachtung in Jahren
+   * @param {*} sollzinssatz_in_prozent Optionale Angabe des zu verwendeten Sollzinssatzes. Wenn dieser Argument nicht gegeben wird, wird er aus dem Eigenkapitalanteil ermittelt.
    * @return {*} JSON object mit dem jährlichen Verlauf und der finalen Rendite
    */
-  compute_rendite_pro_jahr_mit_variablem_eigenkapital(eigenkapital, investitionsdauer){
+  compute_rendite_pro_jahr_mit_variablem_eigenkapital(eigenkapital, investitionsdauer, sollzinssatz_in_prozent){
     // object which is returned at the end
     var result = {
       verlauf: [],
@@ -186,8 +180,15 @@ export default class ReturnCalculator {
     if(finanzierungsvolumen < 0)
     finanzierungsvolumen = 0;
 
+    // Either compute the sollzins from the eigenkapitalanteil or take the given function argument
+    var zinssatz = 0;
+    if(sollzinssatz_in_prozent == null)
+      zinssatz = SollzinsRechner.zins_pro_eigenkapitalanteil(eigenkapital/this.input.netto_kaufpreis);
+    else
+      zinssatz = sollzinssatz_in_prozent/100.;
+
     const [sollzinstabelle, tilgungstabelle, restschulden] = this.compute_annuitätendarlehen_verlauf(
-      finanzierungsvolumen, investitionsdauer, this.zins_pro_eigenkapitalanteil(eigenkapital/this.input.netto_kaufpreis), this.input.tilgungsrate_pro_jahr/100.
+      finanzierungsvolumen, investitionsdauer, zinssatz, this.input.tilgungsrate_pro_jahr/100.
     );
 
     var mieteinkünfte_pro_jahr = (this.input.erwartete_jahreskaltsmiete - this.input.laufende_kosten_pro_jahr);
@@ -256,7 +257,7 @@ export default class ReturnCalculator {
     var max_rendite = -1000;
     var max_details = {};
 
-    for(var i=0; i<100; i++){
+    for(var i=1; i<100; i++){
       const eigenkapital = this.compute_gesamt_anschaffungspreis() * (i/100.);
       const details = this.compute_rendite_pro_jahr_mit_variablem_eigenkapital(eigenkapital, this.input.finanzierungsdauer_in_jahren);
       const rendite = details.cashflow_pa_relativ;
@@ -311,7 +312,7 @@ export default class ReturnCalculator {
    * Berechne und zeige den Verlauf eines beispielhaften Annuitätendarlehns
    */
   plot_annuitaetendarlehen() {
-    const zinssatz = this.zins_pro_eigenkapitalanteil(0.20);
+    const zinssatz = SollzinsRechner.zins_pro_eigenkapitalanteil(0.20);
     const tilgungssatz = this.input.tilgungsrate_pro_jahr/100.;
 
     const [sollzinstabelle, tilgungstabelle, restschulden] = this.compute_annuitätendarlehen_verlauf(1, 10, zinssatz, tilgungssatz);
@@ -358,8 +359,10 @@ export default class ReturnCalculator {
    * Berechne und zeige den jährlichen Verlauf eines konkreten Investments
    */
   display_timeline_for_fixed_eigenkapital() {
-    const details = this.compute_rendite_pro_jahr_mit_variablem_eigenkapital(this.input.eigenkapital, this.input.finanzierungsdauer_in_jahren);
+    const details = this.compute_rendite_pro_jahr_mit_variablem_eigenkapital(this.input.eigenkapital, this.input.finanzierungsdauer_in_jahren, this.input.sollzins);
 
+    document.getElementById("einzelfallrechner_rendite_pa_absolut").innerHTML = Number(details["cashflow_pa_absolut"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("einzelfallrechner_rendite_pa_relativ").innerHTML = Number(details["cashflow_pa_relativ"]).toLocaleString('de-DE', { maximumFractionDigits: 1}) + "%";
     document.getElementById("einzelfallrechner_anschaffungspreis_in_jahreskaltmieten").innerHTML = Number(details["anschaffungspreis_in_jahreskaltmieten"]).toLocaleString('de-DE', { maximumFractionDigits: 1}) + " Jahreskaltmieten";
     document.getElementById("einzelfallrechner_restschulden").innerHTML = Number(details["restschulden"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
     document.getElementById("einzelfallrechner_gesamtanschaffungskosten").innerHTML = Number(details["gesamtanschaffungskosten"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";

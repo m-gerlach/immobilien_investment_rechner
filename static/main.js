@@ -5,7 +5,7 @@ const input = new Input();
 
 // Main function which is called on load
 window.onload = function(){
-  input.handle_changes();
+  input.handle_form_changes("rendite_pro_eigenkapital_form");
   input.show();
 
   const return_calculator = new ReturnCalculator(input);

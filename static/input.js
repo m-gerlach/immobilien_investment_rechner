@@ -1,3 +1,5 @@
+import SollzinsRechner from "./sollzinsrechner.js";
+
 export default class Input {
   constructor() {
     this.eigenkapital                                   = 10000;
@@ -9,6 +11,8 @@ export default class Input {
     this.laufende_kosten_pro_jahr                       = "";
     this.finanzierungsdauer_in_jahren                   = 10;
     this.baujahr                                        = 1990;
+    this.set_default_sollzins                           = true;
+    this.sollzins                                       = "";
     this.tilgungsrate_pro_jahr                          = 1;
     this.maklercourtage                                 = 3.57;
     this.rücklagen_enthalten_in_kaufpreis               = 0;
@@ -28,7 +32,7 @@ export default class Input {
   */
  update_rendite_pro_eigenkapital() {
    this.read_rendite_pro_eigenkapital_input();
-   this.handle_changes();
+   this.handle_form_changes("rendite_pro_eigenkapital_form");
    this.show();
   }
 
@@ -37,7 +41,7 @@ export default class Input {
   */
  update_einzelfallrechner() {
    this.read_einzelfallrechner_input();
-   this.handle_changes();
+   this.handle_form_changes("einzelfallrechner_form");
    this.show();
   }
 
@@ -78,6 +82,8 @@ export default class Input {
     this.set_default_laufende_kosten_pro_jahr = Boolean(document.forms["einzelfallrechner_form"]["set_default_laufende_kosten_pro_jahr"].checked);
     this.finanzierungsdauer_in_jahren = Number(document.forms["einzelfallrechner_form"]["finanzierungsdauer_in_jahren"].value);
     this.baujahr = Number(document.forms["einzelfallrechner_form"]["baujahr"].value);
+    this.set_default_sollzins = Boolean(document.forms["einzelfallrechner_form"]["set_default_sollzins"].checked);
+    this.sollzins = Number(document.forms["einzelfallrechner_form"]["sollzins"].value);
     this.tilgungsrate_pro_jahr = Number(document.forms["einzelfallrechner_form"]["tilgungsrate_pro_jahr"].value);
     this.maklercourtage = Number(document.forms["einzelfallrechner_form"]["maklercourtage"].value);
     this.rücklagen_enthalten_in_kaufpreis = Number(document.forms["einzelfallrechner_form"]["rücklagen_enthalten_in_kaufpreis"].value);
@@ -92,7 +98,7 @@ export default class Input {
     this.erwerb_durch_vermögensverwaltende_körperschaft = Boolean(document.forms["einzelfallrechner_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked);
   }
 
-  handle_changes() {
+  handle_form_changes(source_form_name) {
     // Handle default laufende_kosten_pro_jahr
     if(this.set_default_laufende_kosten_pro_jahr) {
       this.laufende_kosten_pro_jahr = this.compute_default_laufende_kosten_pro_jahr();
@@ -100,7 +106,7 @@ export default class Input {
       document.forms["einzelfallrechner_form"]["laufende_kosten_pro_jahr"].setAttribute("disabled", "");
     }
     else {
-      this.laufende_kosten_pro_jahr = document.forms["rendite_pro_eigenkapital_form"]["laufende_kosten_pro_jahr"].value;
+      this.laufende_kosten_pro_jahr = document.forms[source_form_name]["laufende_kosten_pro_jahr"].value;
       document.forms["rendite_pro_eigenkapital_form"]["laufende_kosten_pro_jahr"].removeAttribute("disabled");
       document.forms["einzelfallrechner_form"]["laufende_kosten_pro_jahr"].removeAttribute("disabled");
     }
@@ -112,9 +118,19 @@ export default class Input {
       document.forms["einzelfallrechner_form"]["grund_und_bodenwert"].setAttribute("disabled", "");
     }
     else {
-      this.grund_und_bodenwert = document.forms["rendite_pro_eigenkapital_form"]["grund_und_bodenwert"].value;
+      this.grund_und_bodenwert = document.forms[source_form_name]["grund_und_bodenwert"].value;
       document.forms["rendite_pro_eigenkapital_form"]["grund_und_bodenwert"].removeAttribute("disabled");
       document.forms["einzelfallrechner_form"]["grund_und_bodenwert"].removeAttribute("disabled");
+    }
+
+    // Handle default sollzins
+    if(this.set_default_sollzins) {
+      this.sollzins = this.compute_default_sollzins();
+      document.forms["einzelfallrechner_form"]["sollzins"].setAttribute("disabled", "");
+    }
+    else {
+      this.sollzins = document.forms[source_form_name]["sollzins"].value;
+      document.forms["einzelfallrechner_form"]["sollzins"].removeAttribute("disabled");
     }
   }
 
@@ -153,6 +169,8 @@ export default class Input {
     document.forms["einzelfallrechner_form"]["laufende_kosten_pro_jahr"].value = this.laufende_kosten_pro_jahr;
     document.forms["einzelfallrechner_form"]["finanzierungsdauer_in_jahren"].value = this.finanzierungsdauer_in_jahren;
     document.forms["einzelfallrechner_form"]["baujahr"].value = this.baujahr;
+    document.forms["einzelfallrechner_form"]["set_default_sollzins"].checked = this.set_default_sollzins;
+    document.forms["einzelfallrechner_form"]["sollzins"].value = this.sollzins;
     document.forms["einzelfallrechner_form"]["tilgungsrate_pro_jahr"].value = this.tilgungsrate_pro_jahr;
     document.forms["einzelfallrechner_form"]["maklercourtage"].value = this.maklercourtage;
     document.forms["einzelfallrechner_form"]["rücklagen_enthalten_in_kaufpreis"].value = this.rücklagen_enthalten_in_kaufpreis;
@@ -176,6 +194,10 @@ export default class Input {
   }
 
   compute_default_grund_und_bodenwert() {
-    return 0.2*this.netto_kaufpreis
+    return 0.2*this.netto_kaufpreis;
+  }
+
+  compute_default_sollzins() {
+    return (100*SollzinsRechner.zins_pro_eigenkapitalanteil(this.eigenkapital/this.netto_kaufpreis)).toFixed(2);
   }
 }
