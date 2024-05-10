@@ -257,7 +257,7 @@ export default class ReturnCalculator {
     var max_rendite = -1000;
     var max_details = {};
 
-    for(var i=1; i<100; i++){
+    for(var i=1; i<=100; i++){
       const eigenkapital = this.compute_gesamt_anschaffungspreis() * (i/100.);
       const details = this.compute_rendite_pro_jahr_mit_variablem_eigenkapital(eigenkapital, this.input.finanzierungsdauer_in_jahren);
       const rendite = details.cashflow_pa_relativ;
