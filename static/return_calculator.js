@@ -361,7 +361,7 @@ export default class ReturnCalculator {
   display_timeline_for_fixed_eigenkapital() {
     const details = this.compute_rendite_pro_jahr_mit_variablem_eigenkapital(this.input.eigenkapital, this.input.finanzierungsdauer_in_jahren, this.input.sollzins);
 
-    document.getElementById("einzelfallrechner_rendite_pa_absolut").innerHTML = Number(details["cashflow_pa_absolut"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("einzelfallrechner_rendite_pa_absolut").innerHTML = Number(details["cashflow_pa_absolut"]/this.input.finanzierungsdauer_in_jahren).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
     document.getElementById("einzelfallrechner_rendite_pa_relativ").innerHTML = Number(details["cashflow_pa_relativ"]).toLocaleString('de-DE', { maximumFractionDigits: 1}) + "%";
     document.getElementById("einzelfallrechner_anschaffungspreis_in_jahreskaltmieten").innerHTML = Number(details["anschaffungspreis_in_jahreskaltmieten"]).toLocaleString('de-DE', { maximumFractionDigits: 1}) + " Jahreskaltmieten";
     document.getElementById("einzelfallrechner_restschulden").innerHTML = Number(details["restschulden"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
