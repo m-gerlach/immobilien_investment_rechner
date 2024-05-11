@@ -33,6 +33,7 @@ export default class Input {
  update_rendite_pro_eigenkapital() {
    this.read_rendite_pro_eigenkapital_input();
    this.handle_form_changes("rendite_pro_eigenkapital_form");
+   this.save();
    this.show();
   }
 
@@ -42,6 +43,7 @@ export default class Input {
  update_einzelfallrechner() {
    this.read_einzelfallrechner_input();
    this.handle_form_changes("einzelfallrechner_form");
+   this.save();
    this.show();
   }
 
@@ -199,5 +201,33 @@ export default class Input {
 
   compute_default_sollzins() {
     return (100*SollzinsRechner.zins_pro_eigenkapitalanteil(this.eigenkapital/this.netto_kaufpreis)).toFixed(2);
+  }
+
+  /**
+   * Save fields to session cookie. This method requires the package js-cookie
+   */
+  save() {
+    console.log("Saving input");
+    Cookies.set('input', JSON.stringify(this));
+  }
+
+  /**
+   * Load fields from session cookie. This method requires the package js-cookie
+  */
+ load() {
+    // Try loading input from cookie
+    var loaded_input = null;
+    try {
+      loaded_input = JSON.parse(Cookies.get('input'));
+    }
+    catch(e){ return; }
+    if(loaded_input == null) { return; }
+
+    // Set individual fields
+    for(var key in this) {
+      if(loaded_input[key] != null) {
+        this[key] = loaded_input[key];
+      }
+    }
   }
 }

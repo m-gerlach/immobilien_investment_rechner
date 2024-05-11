@@ -3,8 +3,9 @@ import ReturnCalculator from "./return_calculator.js"
 
 const input = new Input();
 
-// Main function which is called on load
+// Main function which is called if the page is loaded initially
 window.onload = function(){
+  input.load();
   input.handle_form_changes("rendite_pro_eigenkapital_form");
   input.show();
 
