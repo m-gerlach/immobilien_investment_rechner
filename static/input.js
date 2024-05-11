@@ -207,7 +207,6 @@ export default class Input {
    * Save fields to session storage.
    */
   save() {
-    console.log("Saving input");
     sessionStorage.setItem('input', JSON.stringify(this));
   }
 
