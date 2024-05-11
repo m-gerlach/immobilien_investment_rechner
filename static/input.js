@@ -204,21 +204,21 @@ export default class Input {
   }
 
   /**
-   * Save fields to session cookie. This method requires the package js-cookie
+   * Save fields to session storage.
    */
   save() {
     console.log("Saving input");
-    Cookies.set('input', JSON.stringify(this));
+    sessionStorage.setItem('input', JSON.stringify(this));
   }
 
   /**
-   * Load fields from session cookie. This method requires the package js-cookie
+   * Load fields from session storage.
   */
  load() {
-    // Try loading input from cookie
+    // Try loading input from session storage
     var loaded_input = null;
     try {
-      loaded_input = JSON.parse(Cookies.get('input'));
+      loaded_input = JSON.parse(sessionStorage.getItem('input'));
     }
     catch(e){ return; }
     if(loaded_input == null) { return; }
