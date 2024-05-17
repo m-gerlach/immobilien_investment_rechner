@@ -202,9 +202,8 @@ export default class ReturnCalculator {
 
       var verlustvortragsgewinn = 0;
       var steuern = 0;
-      if(zu_versteuernder_gewinn < 0) {
-        if(! this.input.erwerb_durch_vermögensverwaltende_körperschaft)
-          verlustvortragsgewinn = Math.max(zu_versteuernder_gewinn, 0) * this.input.einkommenssteuersatz/100.;
+      if(zu_versteuernder_gewinn < 0 && !this.input.gewerblich_vermietet) {
+        verlustvortragsgewinn = -zu_versteuernder_gewinn * this.input.einkommenssteuersatz/100.;
       }
       else if(this.input.erwerb_durch_vermögensverwaltende_körperschaft)
         steuern = this.compute_v_und_v_körperschaftssteuer(zu_versteuernder_gewinn);
