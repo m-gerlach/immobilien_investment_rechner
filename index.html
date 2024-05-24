@@ -51,141 +51,141 @@
             <form name="rendite_pro_eigenkapital_form" onsubmit="compute_rendite_pro_eigenkapital()" method="post">
               <div class="row">
                 <div class="col-sm-8">
-                  <label for="netto_kaufpreis">Netto Kaufpreis:</label>
+                  <label for="netto_kaufpreis" title="Reiner Kaufpreis ohne Maklerkosten oder Grunderwerbssteuer">Netto Kaufpreis:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="netto_kaufpreis" name="netto_kaufpreis" min="0" required="true" oninput="update_rendite_pro_eigenkapital()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="zusätzliche_erhaltungsaufwände">Zusätzliche Erhaltungsaufwände:</label>
+                  <label for="zusätzliche_erhaltungsaufwände" title="Zusätzliche Renovierungskosten lassen sich sofort Absetzen wenn sie nicht 15% der Anschaffungskosten der Immobilie in den ersten drei Jahren übersteigen">Zusätzliche Erhaltungsaufwände:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="zusätzliche_erhaltungsaufwände" name="zusätzliche_erhaltungsaufwände" min="0" oninput="update_rendite_pro_eigenkapital()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="zusätzliche_herstellungsaufwände">Zusätzliche Herstellungsaufwände:</label>
+                  <label for="zusätzliche_herstellungsaufwände" title="Herstellungskosten die den Grundlegenden Wert der Immobilie nachhaltig erhöhen zählen zu den Anschaffungskosten und werden über die AfA abgesetzt.">Zusätzliche Herstellungsaufwände:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="zusätzliche_herstellungsaufwände" name="zusätzliche_herstellungsaufwände" min="0" oninput="update_rendite_pro_eigenkapital()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="erwartete_jahreskaltsmiete">Erwartete Jahreskaltsmiete:</label>
+                  <label for="erwartete_jahreskaltsmiete" title="Kaltmiete die über ein Jahr vom Mieter gezahlt wird.">Erwartete Jahreskaltsmiete:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="erwartete_jahreskaltsmiete" name="erwartete_jahreskaltsmiete" min="0" required="true" oninput="update_rendite_pro_eigenkapital()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="wohnfläche">Wohnfläche:</label>
+                  <label for="wohnfläche" title="Die Wohnfläche entscheidet über die zu erwartenden Instandhaltungsaufwände.">Wohnfläche:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="wohnfläche" name="wohnfläche" min="0" required="true" oninput="update_rendite_pro_eigenkapital()"> m<sup>2</sup>
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="baujahr">Baujahr:</label>
+                  <label for="baujahr" title="Das Baujahr entscheidet über die Höhe der AfA (2,5% bei Gebäuden älter als 1925) und den zu erwartenden Instandhaltungsaufwänden.">Baujahr:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="baujahr" name="baujahr" min="0" oninput="update_rendite_pro_eigenkapital()">
                 </div>
 
                 <div class="col-sm-4">
-                  <label for="laufende_kosten_pro_jahr">Laufende Kosten pro Jahr:</label>
+                  <label for="laufende_kosten_pro_jahr" title="Dies beinhaltet den nicht umlegbare Anteil vom Hausgeld, sowie Instandhaltungsmaßnahmen am Sondereigentum die pro Jahr anfallen.">Laufende Kosten pro Jahr:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="set_default_laufende_kosten_pro_jahr" name="set_default_laufende_kosten_pro_jahr" onchange="update_rendite_pro_eigenkapital()">
-                  <label for="set_default_laufende_kosten_pro_jahr">Automatisch füllen</label>
+                  <label for="set_default_laufende_kosten_pro_jahr" title="Schätze die Instandhaltungskosten anhand der Richtline für sozialen Wohnungsbau in Detschland ab.">Automatisch füllen</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="laufende_kosten_pro_jahr" name="laufende_kosten_pro_jahr" min="0" oninput="update_rendite_pro_eigenkapital()"> €
                 </div>
 
                 <div class="col-sm-8">
-                    <label for="finanzierungsdauer_in_jahren">Finanzierungsdauer:</label>
+                    <label for="finanzierungsdauer_in_jahren" title="Der Zeitraum der für die Kalkulation betrachtet werden soll. Beachte, dass steuerfreie Gewinne aus Immobilienverkäufen für privatpersonen erst nach 10 Jahren möglich sind!">Finanzierungsdauer:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="finanzierungsdauer_in_jahren" name="finanzierungsdauer_in_jahren" min="0" max="50" oninput="update_rendite_pro_eigenkapital()"> Jahre
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="tilgungsrate_pro_jahr">Tilgungsrate pro Jahr:</label>
+                  <label for="tilgungsrate_pro_jahr" title="Tilgungssatz der Kapitalfinanzierung.">Tilgungsrate pro Jahr:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="tilgungsrate_pro_jahr" name="tilgungsrate_pro_jahr" min="0" max="100" oninput="update_rendite_pro_eigenkapital()"> %
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="rücklagen_enthalten_in_kaufpreis">Rücklagen (Enthalten im Kaufpreis):</label>
+                  <label for="rücklagen_enthalten_in_kaufpreis" title="Instandhaltungsrücklagen die im Kaufpreis entahlten sind wie eine Einbauküche mindern die Grunderwerbssteuer.">Rücklagen (Enthalten im Kaufpreis):</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="rücklagen_enthalten_in_kaufpreis" name="rücklagen_enthalten_in_kaufpreis" min="0" oninput="update_rendite_pro_eigenkapital()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="zusätzliche_enthaltente_werte_in_kaufpreis">Zusätzlich enthaltene Werte im Kaufpreis:</label>
+                  <label for="zusätzliche_enthaltente_werte_in_kaufpreis" title="Bewegliche Güter die im Kaufpreis entahlten sind, wie eine Einbauküche, mindern die Grunderwerbssteuer.">Zusätzlich enthaltene Werte im Kaufpreis:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="zusätzliche_enthaltente_werte_in_kaufpreis" name="zusätzliche_enthaltente_werte_in_kaufpreis" min="0" oninput="update_rendite_pro_eigenkapital()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="maklercourtage">Maklercourtage:</label>
+                  <label for="maklercourtage" title="Den Prozentsatz vom Nettokaufpreis den sich Immobilienmakler für ihre außerordentlich wichtige und aufwändige Arbeit in die eigene Tasche stopfen.">Maklercourtage:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="maklercourtage" name="maklercourtage" min="0" max="100" step="0.01" oninput="update_rendite_pro_eigenkapital()"> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="notarkosten">Notarkosten:</label>
+                  <label for="notarkosten" title="Kosten für Notarbesuche und Formalitäten in Abhängigkeit vom Nettokaufpreis.">Notarkosten:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="notarkosten" name="notarkosten" min="0" max="100" step="0.01" oninput="update_rendite_pro_eigenkapital()"> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="grunderwerbssteuersatz">Grunderwerbssteuersatz:</label>
+                  <label for="grunderwerbssteuersatz" title="Grunderwerbssteuersatz des jeweiligen Bundeslandes.">Grunderwerbssteuersatz:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.01" oninput="update_rendite_pro_eigenkapital()"> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-4">
-                  <label for="grund_und_bodenwert">Grund- und Bodenwert:</label>
+                  <label for="grund_und_bodenwert" title="Der Grund- und Bodenwert wird bei der AfA nicht betrachtet und muss abgezogen werden.">Grund- und Bodenwert:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="set_default_grund_und_bodenwert" name="set_default_grund_und_bodenwert" onchange="update_rendite_pro_eigenkapital()">
-                  <label for="set_default_grund_und_bodenwert">Automatisch füllen</label>
+                  <label for="set_default_grund_und_bodenwert" title="Der Grund- und Bodenwert lässt sich über Bodenrichtwertetabellen der Länder bestimmen. Hier wird er beispielhaft auf 1/5 des Nettokaufpreises abgeschätzt.">Automatisch füllen</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="grund_und_bodenwert" name="grund_und_bodenwert" min="0" oninput="update_rendite_pro_eigenkapital()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="gewerblich_vermietet">Gewerbliche Vermietung:</label>
+                  <label for="gewerblich_vermietet" title="Gewerblicher Betrieb bei Immobilien ist nur angenommen bei mehr als drei Immobilienveräußerungen innerhalb eines Zeitraums von 5 Jahren. Dann fällt zusätzliche Gewerbesteuer an.">Gewerbliche Vermietung:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="gewerblich_vermietet" name="gewerblich_vermietet" onchange="update_rendite_pro_eigenkapital()">
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="denkmalgeschützt">Denkmalgeschützt:</label>
+                  <label for="denkmalgeschützt" title="Denkmalgeschützte Immobilien haben eine spezielle AfA von 9% in den ersten acht Jahren nach Erwerb und 7% danach.">Denkmalgeschützt:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="denkmalgeschützt" name="denkmalgeschützt" onchange="update_rendite_pro_eigenkapital()">
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="einkommenssteuer_grenzsatz">einkommenssteuer_grenzsatz:</label>
+                  <label for="einkommenssteuer_grenzsatz" title="Der Grenzsatz gibt an wie viel von jedem mehr verdienten Euro Einkommenssteuer abgezogen wird.">Einkommenssteuer-Grenzsatz:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="einkommenssteuer_grenzsatz" name="einkommenssteuer_grenzsatz" min="0" max="100" step="0.01" oninput="update_rendite_pro_eigenkapital()"> %
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="erwerb_durch_vermögensverwaltende_körperschaft">Erwerb durch vermögensverwaltende Körperschaft (z.B. Stiftung):</label>
+                  <label for="erwerb_durch_vermögensverwaltende_körperschaft" title="Vermögensverwaltende Körperschaften zahlen lediglich Körperschaftssteuer, haben jedoch keine Freigrenzen.">Erwerb durch vermögensverwaltende Körperschaft (z.B. Stiftung):</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="erwerb_durch_vermögensverwaltende_körperschaft" name="erwerb_durch_vermögensverwaltende_körperschaft" onchange="update_rendite_pro_eigenkapital()">
@@ -258,152 +258,152 @@
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="netto_kaufpreis">Netto Kaufpreis:</label>
+                  <label for="netto_kaufpreis" title="Reiner Kaufpreis ohne Maklerkosten oder Grunderwerbssteuer">Netto Kaufpreis:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="netto_kaufpreis" name="netto_kaufpreis" min="0" required="true" oninput="update_einzelfallrechner()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="zusätzliche_erhaltungsaufwände">Zusätzliche Erhaltungsaufwände:</label>
+                  <label for="zusätzliche_erhaltungsaufwände" title="Zusätzliche Renovierungskosten lassen sich sofort Absetzen wenn sie nicht 15% der Anschaffungskosten der Immobilie in den ersten drei Jahren übersteigen">Zusätzliche Erhaltungsaufwände:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="zusätzliche_erhaltungsaufwände" name="zusätzliche_erhaltungsaufwände" min="0" oninput="update_einzelfallrechner()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="zusätzliche_herstellungsaufwände">Zusätzliche Herstellungsaufwände:</label>
+                  <label for="zusätzliche_herstellungsaufwände" title="Herstellungskosten die den Grundlegenden Wert der Immobilie nachhaltig erhöhen zählen zu den Anschaffungskosten und werden über die AfA abgesetzt.">Zusätzliche Herstellungsaufwände:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="zusätzliche_herstellungsaufwände" name="zusätzliche_herstellungsaufwände" min="0" oninput="update_einzelfallrechner()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="erwartete_jahreskaltsmiete">Erwartete Jahreskaltsmiete:</label>
+                  <label for="erwartete_jahreskaltsmiete" title="Kaltmiete die über ein Jahr vom Mieter gezahlt wird.">Erwartete Jahreskaltsmiete:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="erwartete_jahreskaltsmiete" name="erwartete_jahreskaltsmiete" min="0" required="true" oninput="update_einzelfallrechner()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="wohnfläche">Wohnfläche:</label>
+                  <label for="wohnfläche" title="Die Wohnfläche entscheidet über die zu erwartenden Instandhaltungsaufwände.">Wohnfläche:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="wohnfläche" name="wohnfläche" min="0" required="true" oninput="update_einzelfallrechner()"> m<sup>2</sup>
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="baujahr">Baujahr:</label>
+                  <label for="baujahr" title="Das Baujahr entscheidet über die Höhe der AfA (2,5% bei Gebäuden älter als 1925) und den zu erwartenden Instandhaltungsaufwänden.">Baujahr:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="baujahr" name="baujahr" min="0" oninput="update_einzelfallrechner()">
                 </div>
 
                 <div class="col-sm-4">
-                  <label for="laufende_kosten_pro_jahr">Laufende Kosten pro Jahr:</label>
+                  <label for="laufende_kosten_pro_jahr" title="Dies beinhaltet den nicht umlegbare Anteil vom Hausgeld, sowie Instandhaltungsmaßnahmen am Sondereigentum die pro Jahr anfallen.">Laufende Kosten pro Jahr:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="set_default_laufende_kosten_pro_jahr" name="set_default_laufende_kosten_pro_jahr" onchange="update_einzelfallrechner()">
-                  <label for="set_default_laufende_kosten_pro_jahr">Automatisch füllen</label>
+                  <label for="set_default_laufende_kosten_pro_jahr" title="Schätze die Instandhaltungskosten anhand der Richtline für sozialen Wohnungsbau in Detschland ab.">Automatisch füllen</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="laufende_kosten_pro_jahr" name="laufende_kosten_pro_jahr" min="0" oninput="update_einzelfallrechner()"> €
                 </div>
 
                 <div class="col-sm-8">
-                    <label for="finanzierungsdauer_in_jahren">Finanzierungsdauer:</label>
+                    <label for="finanzierungsdauer_in_jahren" title="Der Zeitraum der für die Kalkulation betrachtet werden soll. Beachte, dass steuerfreie Gewinne aus Immobilienverkäufen für privatpersonen erst nach 10 Jahren möglich sind!">Finanzierungsdauer:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="finanzierungsdauer_in_jahren" name="finanzierungsdauer_in_jahren" min="0" max="50" oninput="update_einzelfallrechner()"> Jahre
                 </div>
 
                 <div class="col-sm-4">
-                  <label for="sollzins">Sollzins:</label>
+                  <label for="sollzins" title="Der Sollzins wird von Banken anhand vieler Faktoren undurchsichtig bestimmt und muss individuell bei jedem Investment aufs neue überprüft werden.">Sollzins:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="set_default_sollzins" name="set_default_sollzins" onchange="update_einzelfallrechner()">
-                  <label for="set_default_sollzins">Automatisch füllen</label>
+                  <label for="set_default_sollzins" title="Schätze den Sollzins anhand des Anteils an eingesetztem Eigenkapital gegenüber des Nettokaufpreises.">Automatisch füllen</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="sollzins" name="sollzins" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()"> %
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="tilgungsrate_pro_jahr">Tilgungsrate pro Jahr:</label>
+                  <label for="tilgungsrate_pro_jahr" title="Tilgungssatz der Kapitalfinanzierung.">Tilgungsrate pro Jahr:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="tilgungsrate_pro_jahr" name="tilgungsrate_pro_jahr" min="0" max="100" oninput="update_einzelfallrechner()"> %
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="rücklagen_enthalten_in_kaufpreis">Rücklagen (Enthalten im Kaufpreis):</label>
+                  <label for="rücklagen_enthalten_in_kaufpreis" title="Instandhaltungsrücklagen sowie bewegliche Güter die im Kaufpreis entahlten sind wie eine Einbauküche mindern die Grunderwerbssteuer.">Rücklagen (Enthalten im Kaufpreis):</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="rücklagen_enthalten_in_kaufpreis" name="rücklagen_enthalten_in_kaufpreis" min="0" oninput="update_einzelfallrechner()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="zusätzliche_enthaltente_werte_in_kaufpreis">Zusätzlich enthaltene Werte im Kaufpreis:</label>
+                  <label for="zusätzliche_enthaltente_werte_in_kaufpreis" title="Bewegliche Güter die im Kaufpreis entahlten sind, wie eine Einbauküche, mindern die Grunderwerbssteuer.">Zusätzlich enthaltene Werte im Kaufpreis:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="zusätzliche_enthaltente_werte_in_kaufpreis" name="zusätzliche_enthaltente_werte_in_kaufpreis" min="0" oninput="update_einzelfallrechner()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="maklercourtage">Maklercourtage:</label>
+                  <label for="maklercourtage" title="Den Prozentsatz vom Nettokaufpreis den sich Immobilienmakler für ihre außerordentlich wichtige und aufwändige Arbeit in die eigene Tasche stopfen.">Maklercourtage:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="maklercourtage" name="maklercourtage" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()"> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="notarkosten">Notarkosten:</label>
+                  <label for="notarkosten" title="Kosten für Notarbesuche und Formalitäten in Abhängigkeit vom Nettokaufpreis.">Notarkosten:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="notarkosten" name="notarkosten" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()"> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="grunderwerbssteuersatz">Grunderwerbssteuersatz:</label>
+                  <label for="grunderwerbssteuersatz" title="Grunderwerbssteuersatz des jeweiligen Bundeslandes.">Grunderwerbssteuersatz:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()"> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-4">
-                  <label for="grund_und_bodenwert">Grund- und Bodenwert:</label>
+                  <label for="grund_und_bodenwert" title="Der Grund- und Bodenwert wird bei der AfA nicht betrachtet und muss abgezogen werden.">Grund- und Bodenwert:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="set_default_grund_und_bodenwert" name="set_default_grund_und_bodenwert" onchange="update_einzelfallrechner()">
-                  <label for="set_default_grund_und_bodenwert">Automatisch füllen</label>
+                  <label for="set_default_grund_und_bodenwert" title="Der Grund- und Bodenwert lässt sich über Bodenrichtwertetabellen der Länder bestimmen. Hier wird er beispielhaft auf 1/5 des Nettokaufpreises abgeschätzt.">Automatisch füllen</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="grund_und_bodenwert" name="grund_und_bodenwert" min="0" oninput="update_einzelfallrechner()"> €
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="gewerblich_vermietet">Gewerbliche Vermietung:</label>
+                  <label for="gewerblich_vermietet" title="Gewerblicher Betrieb bei Immobilien ist nur angenommen bei mehr als drei Immobilienveräußerungen innerhalb eines Zeitraums von 5 Jahren. Dann fällt zusätzliche Gewerbesteuer an.">Gewerbliche Vermietung:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="gewerblich_vermietet" name="gewerblich_vermietet" onchange="update_einzelfallrechner()">
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="denkmalgeschützt">Denkmalgeschützt:</label>
+                  <label for="denkmalgeschützt" title="Denkmalgeschützte Immobilien haben eine spezielle AfA von 9% in den ersten acht Jahren nach Erwerb und 7% danach.">Denkmalgeschützt:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="denkmalgeschützt" name="denkmalgeschützt" onchange="update_einzelfallrechner()">
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="einkommenssteuer_grenzsatz">einkommenssteuer_grenzsatz:</label>
+                  <label for="einkommenssteuer_grenzsatz" title="Der Grenzsatz gibt an wie viel von jedem mehr verdienten Euro Einkommenssteuer abgezogen wird.">Einkommenssteuer-Grenzsatz:</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="number" id="einkommenssteuer_grenzsatz" name="einkommenssteuer_grenzsatz" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()"> %
                 </div>
 
                 <div class="col-sm-8">
-                  <label for="erwerb_durch_vermögensverwaltende_körperschaft">Erwerb durch vermögensverwaltende Körperschaft (z.B. Stiftung):</label>
+                  <label for="erwerb_durch_vermögensverwaltende_körperschaft" title="Vermögensverwaltende Körperschaften zahlen lediglich Körperschaftssteuer, haben jedoch keine Freigrenzen.">Erwerb durch vermögensverwaltende Körperschaft (z.B. Stiftung):</label>
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="erwerb_durch_vermögensverwaltende_körperschaft" name="erwerb_durch_vermögensverwaltende_körperschaft" onchange="update_einzelfallrechner()">
