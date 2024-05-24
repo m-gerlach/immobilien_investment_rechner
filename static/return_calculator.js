@@ -104,11 +104,11 @@ export default class ReturnCalculator {
    * Berechne die anfallende Umsatzsteuer eines zusätzlich anfallenden Gewinns bei einem festen Einkommensteuersatz.
    * Progression im Einkommensteuersatz ist hier vernachlässigt.
    * @param {*} zu_versteuernder_gewinn Zusätzlicher Gewinn den es zu versteuern gilt
-   * @param {*} einkommenssteuersatz Satz der zu zahlenden Einkommenssteuerprogression zwischen 0 und 0.42 (bzw. 0.45 bei Reichensteuer)
+   * @param {*} einkommenssteuer_grenzsatz Satz der zu zahlenden Einkommenssteuerprogression zwischen 0 und 0.42 (bzw. 0.45 bei Reichensteuer)
    * @returns Anfallende Umsatzsteuer
    */
-  compute_v_und_v_einkommenssteuer(zu_versteuernder_gewinn, einkommenssteuersatz) {
-    return zu_versteuernder_gewinn * einkommenssteuersatz;
+  compute_v_und_v_einkommenssteuer(zu_versteuernder_gewinn, einkommenssteuer_grenzsatz) {
+    return zu_versteuernder_gewinn * einkommenssteuer_grenzsatz;
   }
 
 
@@ -146,8 +146,22 @@ export default class ReturnCalculator {
     return this.input.netto_kaufpreis
       + (this.input.netto_kaufpreis * this.input.maklercourtage/100.)
       + (this.input.netto_kaufpreis * this.input.notarkosten/100.)
-      + this.input.zusätzliche_modernisierungskosten
+      + this.input.zusätzliche_erhaltungsaufwände
+      + this.input.zusätzliche_herstellungsaufwände
       + this.compute_grunderwerbssteuer();
+  }
+
+  /**
+   * Reine Erhaltungsaufwände (d.h. keine Herstellungsaufwände) sind sofort voll abzugsfähig solange sie nicht in den ersten drei Jahren nach Kauf der Immobilie 15% des Anschaffungspreises übersteigen.
+   * @returns Die sofort abzugsfähige Summe aus Erhaltungsaufwänden
+   */
+  compute_sofort_abschreibbare_erhaltungsaufwände_beim_kauf() {
+    if(this.input.zusätzliche_erhaltungsaufwände > 0.15*(this.input.netto_kaufpreis + (this.input.netto_kaufpreis * this.input.maklercourtage/100.) + (this.input.netto_kaufpreis * this.input.notarkosten/100.))) {
+      return 0;
+    }
+    else {
+      return this.input.zusätzliche_erhaltungsaufwände;
+    }
   }
 
   /**
@@ -191,24 +205,31 @@ export default class ReturnCalculator {
       finanzierungsvolumen, investitionsdauer, zinssatz, this.input.tilgungsrate_pro_jahr/100.
     );
 
+    var sofort_abschreibbare_erhaltungsaufwände_beim_kauf = this.compute_sofort_abschreibbare_erhaltungsaufwände_beim_kauf();
+
     var mieteinkünfte_pro_jahr = (this.input.erwartete_jahreskaltsmiete - this.input.laufende_kosten_pro_jahr);
     var cashflow_pro_jahr = [];
-    const abschreibbarer_gebäudewert = (anschaffungspreis - this.input.grund_und_bodenwert - this.input.rücklagen_enthalten_in_kaufpreis);
+    const abschreibbarer_gebäudewert = (anschaffungspreis - this.input.grund_und_bodenwert - this.input.rücklagen_enthalten_in_kaufpreis - sofort_abschreibbare_erhaltungsaufwände_beim_kauf);
 
     // Compute progress for each year individually
     for(var jahr in [...Array(investitionsdauer).keys()]) {
       var afa = abschreibbarer_gebäudewert * this.compute_abschreibung_in_prozent(jahr)/100.;
       var zu_versteuernder_gewinn = Math.round(mieteinkünfte_pro_jahr - sollzinstabelle[jahr] - afa);
 
+      // Im ersten Jahr lassen sich Erhaltungsaufwände unter bestimmten Bedingungen sofort absetzen
+      if(jahr == 0) {
+        zu_versteuernder_gewinn = Math.round(zu_versteuernder_gewinn - sofort_abschreibbare_erhaltungsaufwände_beim_kauf);
+      }
+
       var verlustvortragsgewinn = 0;
       var steuern = 0;
       if(zu_versteuernder_gewinn < 0 && !this.input.gewerblich_vermietet) {
-        verlustvortragsgewinn = -zu_versteuernder_gewinn * this.input.einkommenssteuersatz/100.;
+        verlustvortragsgewinn = -zu_versteuernder_gewinn * this.input.einkommenssteuer_grenzsatz/100.;
       }
       else if(this.input.erwerb_durch_vermögensverwaltende_körperschaft)
         steuern = this.compute_v_und_v_körperschaftssteuer(zu_versteuernder_gewinn);
       else
-        steuern = this.compute_v_und_v_einkommenssteuer(zu_versteuernder_gewinn, this.input.einkommenssteuersatz/100.);
+        steuern = this.compute_v_und_v_einkommenssteuer(zu_versteuernder_gewinn, this.input.einkommenssteuer_grenzsatz/100.);
 
       var cashflow = Math.round(mieteinkünfte_pro_jahr - sollzinstabelle[jahr] - tilgungstabelle[jahr] - steuern + verlustvortragsgewinn)
       cashflow_pro_jahr.push(cashflow)

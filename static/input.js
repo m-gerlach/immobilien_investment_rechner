@@ -4,7 +4,8 @@ export default class Input {
   constructor() {
     this.eigenkapital                                   = 10000;
     this.netto_kaufpreis                                = 59000;
-    this.zusätzliche_modernisierungskosten              = 1000;
+    this.zusätzliche_erhaltungsaufwände              = 1000;
+    this.zusätzliche_herstellungsaufwände              = 0;
     this.erwartete_jahreskaltsmiete                     = 4500;
     this.wohnfläche                                     = 50;
     this.set_default_laufende_kosten_pro_jahr           = true;
@@ -23,7 +24,7 @@ export default class Input {
     this.grund_und_bodenwert                            = "";
     this.gewerblich_vermietet                           = false;
     this.denkmalgeschützt                               = false;
-    this.einkommenssteuersatz                           = 30;
+    this.einkommenssteuer_grenzsatz                     = 37;
     this.erwerb_durch_vermögensverwaltende_körperschaft = false;
   }
 
@@ -52,7 +53,8 @@ export default class Input {
    */
   read_rendite_pro_eigenkapital_input() {
     this.netto_kaufpreis = Number(document.forms["rendite_pro_eigenkapital_form"]["netto_kaufpreis"].value);
-    this.zusätzliche_modernisierungskosten = Number(document.forms["rendite_pro_eigenkapital_form"]["zusätzliche_modernisierungskosten"].value);
+    this.zusätzliche_erhaltungsaufwände = Number(document.forms["rendite_pro_eigenkapital_form"]["zusätzliche_erhaltungsaufwände"].value);
+    this.zusätzliche_herstellungsaufwände = Number(document.forms["rendite_pro_eigenkapital_form"]["zusätzliche_herstellungsaufwände"].value);
     this.erwartete_jahreskaltsmiete = Number(document.forms["rendite_pro_eigenkapital_form"]["erwartete_jahreskaltsmiete"].value);
     this.wohnfläche = Number(document.forms["rendite_pro_eigenkapital_form"]["wohnfläche"].value);
     this.set_default_laufende_kosten_pro_jahr = Boolean(document.forms["rendite_pro_eigenkapital_form"]["set_default_laufende_kosten_pro_jahr"].checked);
@@ -68,7 +70,7 @@ export default class Input {
     this.grund_und_bodenwert = Number(document.forms["rendite_pro_eigenkapital_form"]["grund_und_bodenwert"].value);
     this.gewerblich_vermietet = Boolean(document.forms["rendite_pro_eigenkapital_form"]["gewerblich_vermietet"].checked);
     this.denkmalgeschützt = Boolean(document.forms["rendite_pro_eigenkapital_form"]["denkmalgeschützt"].checked);
-    this.einkommenssteuersatz = Number(document.forms["rendite_pro_eigenkapital_form"]["einkommenssteuersatz"].value);
+    this.einkommenssteuer_grenzsatz = Number(document.forms["rendite_pro_eigenkapital_form"]["einkommenssteuer_grenzsatz"].value);
     this.erwerb_durch_vermögensverwaltende_körperschaft = Boolean(document.forms["rendite_pro_eigenkapital_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked);
   }
 
@@ -78,7 +80,8 @@ export default class Input {
   read_einzelfallrechner_input() {
     this.eigenkapital = Number(document.forms["einzelfallrechner_form"]["eigenkapital"].value);
     this.netto_kaufpreis = Number(document.forms["einzelfallrechner_form"]["netto_kaufpreis"].value);
-    this.zusätzliche_modernisierungskosten = Number(document.forms["einzelfallrechner_form"]["zusätzliche_modernisierungskosten"].value);
+    this.zusätzliche_erhaltungsaufwände = Number(document.forms["einzelfallrechner_form"]["zusätzliche_erhaltungsaufwände"].value);
+    this.zusätzliche_herstellungsaufwände = Number(document.forms["einzelfallrechner_form"]["zusätzliche_herstellungsaufwände"].value);
     this.erwartete_jahreskaltsmiete = Number(document.forms["einzelfallrechner_form"]["erwartete_jahreskaltsmiete"].value);
     this.wohnfläche = Number(document.forms["einzelfallrechner_form"]["wohnfläche"].value);
     this.set_default_laufende_kosten_pro_jahr = Boolean(document.forms["einzelfallrechner_form"]["set_default_laufende_kosten_pro_jahr"].checked);
@@ -96,7 +99,7 @@ export default class Input {
     this.grund_und_bodenwert = Number(document.forms["einzelfallrechner_form"]["grund_und_bodenwert"].value);
     this.gewerblich_vermietet = Boolean(document.forms["einzelfallrechner_form"]["gewerblich_vermietet"].checked);
     this.denkmalgeschützt = Boolean(document.forms["einzelfallrechner_form"]["denkmalgeschützt"].checked);
-    this.einkommenssteuersatz = Number(document.forms["einzelfallrechner_form"]["einkommenssteuersatz"].value);
+    this.einkommenssteuer_grenzsatz = Number(document.forms["einzelfallrechner_form"]["einkommenssteuer_grenzsatz"].value);
     this.erwerb_durch_vermögensverwaltende_körperschaft = Boolean(document.forms["einzelfallrechner_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked);
   }
 
@@ -142,7 +145,8 @@ export default class Input {
   show() {
     // rendite_pro_eigenkapital_form
     document.forms["rendite_pro_eigenkapital_form"]["netto_kaufpreis"].value = this.netto_kaufpreis;
-    document.forms["rendite_pro_eigenkapital_form"]["zusätzliche_modernisierungskosten"].value = this.zusätzliche_modernisierungskosten;
+    document.forms["rendite_pro_eigenkapital_form"]["zusätzliche_erhaltungsaufwände"].value = this.zusätzliche_erhaltungsaufwände;
+    document.forms["rendite_pro_eigenkapital_form"]["zusätzliche_herstellungsaufwände"].value = this.zusätzliche_herstellungsaufwände;
     document.forms["rendite_pro_eigenkapital_form"]["erwartete_jahreskaltsmiete"].value = this.erwartete_jahreskaltsmiete;
     document.forms["rendite_pro_eigenkapital_form"]["wohnfläche"].value = this.wohnfläche;
     document.forms["rendite_pro_eigenkapital_form"]["set_default_laufende_kosten_pro_jahr"].checked = this.set_default_laufende_kosten_pro_jahr;
@@ -159,12 +163,13 @@ export default class Input {
     document.forms["rendite_pro_eigenkapital_form"]["grund_und_bodenwert"].value = this.grund_und_bodenwert;
     document.forms["rendite_pro_eigenkapital_form"]["gewerblich_vermietet"].checked = this.gewerblich_vermietet;
     document.forms["rendite_pro_eigenkapital_form"]["denkmalgeschützt"].checked = this.denkmalgeschützt;
-    document.forms["rendite_pro_eigenkapital_form"]["einkommenssteuersatz"].value = this.einkommenssteuersatz;
+    document.forms["rendite_pro_eigenkapital_form"]["einkommenssteuer_grenzsatz"].value = this.einkommenssteuer_grenzsatz;
     document.forms["rendite_pro_eigenkapital_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked = this.erwerb_durch_vermögensverwaltende_körperschaft;
     // einzelfallrechner_form
     document.forms["einzelfallrechner_form"]["eigenkapital"].value = this.eigenkapital;
     document.forms["einzelfallrechner_form"]["netto_kaufpreis"].value = this.netto_kaufpreis;
-    document.forms["einzelfallrechner_form"]["zusätzliche_modernisierungskosten"].value = this.zusätzliche_modernisierungskosten;
+    document.forms["einzelfallrechner_form"]["zusätzliche_erhaltungsaufwände"].value = this.zusätzliche_erhaltungsaufwände;
+    document.forms["einzelfallrechner_form"]["zusätzliche_herstellungsaufwände"].value = this.zusätzliche_herstellungsaufwände;
     document.forms["einzelfallrechner_form"]["erwartete_jahreskaltsmiete"].value = this.erwartete_jahreskaltsmiete;
     document.forms["einzelfallrechner_form"]["wohnfläche"].value = this.wohnfläche;
     document.forms["einzelfallrechner_form"]["set_default_laufende_kosten_pro_jahr"].checked = this.set_default_laufende_kosten_pro_jahr;
@@ -183,7 +188,7 @@ export default class Input {
     document.forms["einzelfallrechner_form"]["grund_und_bodenwert"].value = this.grund_und_bodenwert;
     document.forms["einzelfallrechner_form"]["gewerblich_vermietet"].checked = this.gewerblich_vermietet;
     document.forms["einzelfallrechner_form"]["denkmalgeschützt"].checked = this.denkmalgeschützt;
-    document.forms["einzelfallrechner_form"]["einkommenssteuersatz"].value = this.einkommenssteuersatz;
+    document.forms["einzelfallrechner_form"]["einkommenssteuer_grenzsatz"].value = this.einkommenssteuer_grenzsatz;
     document.forms["einzelfallrechner_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked = this.erwerb_durch_vermögensverwaltende_körperschaft;
   }
 
