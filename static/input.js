@@ -4,8 +4,8 @@ export default class Input {
   constructor() {
     this.eigenkapital                                   = 10000;
     this.netto_kaufpreis                                = 59000;
-    this.zusätzliche_erhaltungsaufwände              = 1000;
-    this.zusätzliche_herstellungsaufwände              = 0;
+    this.zusätzliche_erhaltungsaufwände                 = 1000;
+    this.zusätzliche_herstellungsaufwände               = 0;
     this.erwartete_jahreskaltsmiete                     = 4500;
     this.wohnfläche                                     = 50;
     this.set_default_laufende_kosten_pro_jahr           = true;
@@ -26,6 +26,9 @@ export default class Input {
     this.denkmalgeschützt                               = false;
     this.einkommenssteuer_grenzsatz                     = 37;
     this.erwerb_durch_vermögensverwaltende_körperschaft = false;
+    this.darlehensrechner_kredit                        = 100000
+    this.darlehensrechner_sollzins                      = 3
+    this.darlehensrechner_tilgungsrate_pro_jahr         = 2
   }
 
   /**
@@ -44,6 +47,15 @@ export default class Input {
  update_einzelfallrechner() {
    this.read_einzelfallrechner_input();
    this.handle_form_changes("einzelfallrechner_form");
+   this.save();
+   this.show();
+  }
+
+  /**
+   * Update the displayed data in the darlehensrechner form and act on changes.
+  */
+ update_darlehensrechner() {
+   this.read_darlehensrechner_input();
    this.save();
    this.show();
   }
@@ -101,6 +113,12 @@ export default class Input {
     this.denkmalgeschützt = Boolean(document.forms["einzelfallrechner_form"]["denkmalgeschützt"].checked);
     this.einkommenssteuer_grenzsatz = Number(document.forms["einzelfallrechner_form"]["einkommenssteuer_grenzsatz"].value);
     this.erwerb_durch_vermögensverwaltende_körperschaft = Boolean(document.forms["einzelfallrechner_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked);
+  }
+
+  read_darlehensrechner_input() {
+    this.darlehensrechner_kredit = Number(document.forms["darlehensrechner_form"]["darlehensrechner_kredit"].value);
+    this.darlehensrechner_sollzins = Number(document.forms["darlehensrechner_form"]["darlehensrechner_sollzins"].value);
+    this.darlehensrechner_tilgungsrate_pro_jahr = Number(document.forms["darlehensrechner_form"]["darlehensrechner_tilgungsrate_pro_jahr"].value);
   }
 
   handle_form_changes(source_form_name) {
@@ -190,6 +208,10 @@ export default class Input {
     document.forms["einzelfallrechner_form"]["denkmalgeschützt"].checked = this.denkmalgeschützt;
     document.forms["einzelfallrechner_form"]["einkommenssteuer_grenzsatz"].value = this.einkommenssteuer_grenzsatz;
     document.forms["einzelfallrechner_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked = this.erwerb_durch_vermögensverwaltende_körperschaft;
+    // darlehensrechner_form
+    document.forms["darlehensrechner_form"]["darlehensrechner_kredit"].value = this.darlehensrechner_kredit;
+    document.forms["darlehensrechner_form"]["darlehensrechner_sollzins"].value = this.darlehensrechner_sollzins;
+    document.forms["darlehensrechner_form"]["darlehensrechner_tilgungsrate_pro_jahr"].value = this.darlehensrechner_tilgungsrate_pro_jahr;
   }
 
   compute_default_laufende_kosten_pro_jahr() {

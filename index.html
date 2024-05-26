@@ -483,7 +483,65 @@
 
           <div id="darlehensrechner" class="container tab-pane"><br>
             <h3>Rückzahlverlauf eines Annuitätendarlehen</h3>
-            <div id='darlehen_div' class="mx-auto d-block" style="max-width: 70vh;"><!-- Plotly chart will be drawn inside this DIV --></div>
+
+            <form name="darlehensrechner_form" onsubmit="update_darlehensrechner()" method="post">
+              <div class="row">
+
+                <div class="col-sm-6">
+                  <label for="darlehensrechner_kredit" title="Die Höhe des Kredits der von dem jeweiligen Krditinstitut vergeben wurde.">Kredithöhe:</label>
+                </div>
+                <div class="col-sm-6">
+                  <input type="number" id="darlehensrechner_kredit" name="darlehensrechner_kredit" min="0" step="1" oninput="update_darlehensrechner()"> €
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="darlehensrechner_sollzins" title="Der Sollzins wird von Banken anhand vieler Faktoren undurchsichtig bestimmt und muss individuell bei jedem Investment aufs neue überprüft werden.">Sollzins:</label>
+                </div>
+                <div class="col-sm-6">
+                  <input type="number" id="darlehensrechner_sollzins" name="darlehensrechner_sollzins" min="0" max="100" step="0.01" oninput="update_darlehensrechner()"> %
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="darlehensrechner_tilgungsrate_pro_jahr" title="Tilgungssatz der Kapitalfinanzierung.">Tilgungsrate pro Jahr:</label>
+                </div>
+                <div class="col-sm-6">
+                  <input type="number" id="darlehensrechner_tilgungsrate_pro_jahr" name="darlehensrechner_tilgungsrate_pro_jahr" min="0" max="100" oninput="update_darlehensrechner()"> %
+                </div>
+
+              </div>
+            </form>
+
+            <div class="mt-3 mb-3" id='darlehensrechner_result' style="display:none; margin-bottom: 50px">
+
+              <hr>
+
+              <div id='darlehen_div' class="mx-auto d-block" style="max-width: 70vh;"><!-- Plotly chart will be drawn inside this DIV --></div>
+
+              <div id='darlehensrechner_details' class="row">
+
+                <div class="col-sm-4">
+                  Belastung pro Jahr
+                </div>
+                <div class="col-sm-2">
+                  <div id='darlehensrechner_belastung_pro_jahr'></div>
+                </div>
+
+                <div class="col-sm-4">
+                  Belastung pro Monat
+                </div>
+                <div class="col-sm-2">
+                  <div id='darlehensrechner_belastung_pro_monat'></div>
+                </div>
+
+                <div class="col-sm-4">
+                  Gesamtrückzahlungsdauer
+                </div>
+                <div class="col-sm-2">
+                  <div id='darlehensrechner_rückzahldauer'></div>
+                </div>
+
+              </div> <!-- darlehensrechner_details -->
+            </div> <!-- darlehensrechner_result -->
           </div> <!-- darlehensrechner -->
 
           <div id="sollzinsverlauf" class="container tab-pane"><br>

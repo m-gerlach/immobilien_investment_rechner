@@ -9,14 +9,23 @@ window.onload = function(){
   input.handle_form_changes("rendite_pro_eigenkapital_form");
   input.show();
 
+  input.update_darlehensrechner();
+
   const return_calculator = new ReturnCalculator(input);
-  return_calculator.plot_annuitaetendarlehen();
   return_calculator.plot_zins_pro_eigenkapitalanteil();
+  return_calculator.display_darlehensverlauf();
 }
 
 // make `update()` function available in HTML
 window.update_rendite_pro_eigenkapital = function() { input.update_rendite_pro_eigenkapital(); }
+
 window.update_einzelfallrechner = function() { input.update_einzelfallrechner(); }
+
+window.update_darlehensrechner = function() {
+  input.update_darlehensrechner();
+  const return_calculator = new ReturnCalculator(input);
+  return_calculator.display_darlehensverlauf();
+}
 
 // make `compute_rendite_pro_eigenkapital()` function available in HTML
 window.compute_rendite_pro_eigenkapital = function() {

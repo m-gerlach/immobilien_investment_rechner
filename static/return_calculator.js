@@ -328,52 +328,6 @@ export default class ReturnCalculator {
     document.getElementById("rendite_pro_eigenkapital_result").style.display = '';
   }
 
-  /**
-   * Berechne und zeige den Verlauf eines beispielhaften Annuitätendarlehns
-   */
-  plot_annuitaetendarlehen() {
-    const zinssatz = SollzinsRechner.zins_pro_eigenkapitalanteil(0.20);
-    const tilgungssatz = this.input.tilgungsrate_pro_jahr/100.;
-
-    const [sollzinstabelle, tilgungstabelle, restschulden] = this.compute_annuitätendarlehen_verlauf(1, 10, zinssatz, tilgungssatz);
-
-    const x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-    var zinsen = {
-      x: x,
-      y: sollzinstabelle,
-      stackgroup: 'one',
-      // groupnorm:'percent',
-      type: 'lines',
-      name: 'Zinsen'
-    };
-
-    var tilgung = {
-      x: x,
-      y: tilgungstabelle,
-      stackgroup: 'one',
-      type: 'lines',
-      name: 'Tilgung'
-    };
-
-    var layout = {
-      title: 'Darlehensverlauf bei ' + (100*zinssatz).toFixed(2) + "% Zinsen und " + (100*tilgungssatz).toFixed(1) + "% Tilgung p.a.",
-      xaxis: {
-        title: 'Jahr',
-      },
-      yaxis: {
-        title: 'Rückzahlrate in %',
-      },
-      paper_bgcolor: 'rgba(255,255,255, 0)',
-      plot_bgcolor: 'rgba(0,0,0,0.1)',
-      font: {
-        color: 'rgba(255,255,255,255)'
-      },
-      autosize: true,
-    };
-
-    Plotly.newPlot('darlehen_div', [zinsen, tilgung], layout, {responsive: true});
-  }
 
   /**
    * Berechne und zeige den jährlichen Verlauf eines konkreten Investments
@@ -406,5 +360,74 @@ export default class ReturnCalculator {
     }
 
     document.getElementById("einzelfallrechner_verlauf").innerHTML = verlauf_content;
+  }
+
+
+  /**
+   * Berechne und zeige den Verlauf eines beispielhaften Annuitätendarlehns
+   */
+  display_darlehensverlauf() {
+    const zinssatz = this.input.darlehensrechner_sollzins/100.;
+    const tilgungssatz = this.input.darlehensrechner_tilgungsrate_pro_jahr/100.;
+    const kredit = this.input.darlehensrechner_kredit;
+
+    const [sollzinstabelle, tilgungstabelle, restschulden] = this.compute_annuitätendarlehen_verlauf(kredit, 1000, zinssatz, tilgungssatz);
+
+    var reduzierte_sollzinstabelle = [];
+    var reduzierte_tilgungstabelle = [];
+    var timeline = [];
+
+    // Berechne Dauer der Rückzahung in Jahren
+    var rückzahldauer = 0;
+    for(var i in tilgungstabelle) {
+
+      if(tilgungstabelle[i] <= 0) {
+        rückzahldauer = i;
+        break;
+      }
+      timeline.push(i);
+      reduzierte_sollzinstabelle.push(sollzinstabelle[i]);
+      reduzierte_tilgungstabelle.push(tilgungstabelle[i]);
+    }
+
+    document.getElementById("darlehensrechner_belastung_pro_jahr").innerHTML = Number(kredit*(zinssatz+tilgungssatz)).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("darlehensrechner_belastung_pro_monat").innerHTML = Number(kredit*(zinssatz+tilgungssatz)/12.).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("darlehensrechner_rückzahldauer").innerHTML = Number(rückzahldauer).toLocaleString('de-DE', { maximumFractionDigits: 0}) + " Jahre";
+    document.getElementById("darlehensrechner_result").style.display = '';
+
+    var zinsen = {
+      x: timeline,
+      y: reduzierte_sollzinstabelle,
+      stackgroup: 'one',
+      // groupnorm:'percent',
+      type: 'lines',
+      name: 'Zinsen'
+    };
+
+    var tilgung = {
+      x: timeline,
+      y: reduzierte_tilgungstabelle,
+      stackgroup: 'one',
+      type: 'lines',
+      name: 'Tilgung'
+    };
+
+    var layout = {
+      title: 'Darlehensverlauf bei ' + (100*zinssatz).toFixed(2) + "% Zinsen und " + (100*tilgungssatz).toFixed(1) + "% Tilgung p.a.",
+      xaxis: {
+        title: 'Jahr',
+      },
+      yaxis: {
+        title: 'Rückzahlrate in %',
+      },
+      paper_bgcolor: 'rgba(255,255,255, 0)',
+      plot_bgcolor: 'rgba(0,0,0,0.1)',
+      font: {
+        color: 'rgba(255,255,255,255)'
+      },
+      autosize: true,
+    };
+
+    Plotly.newPlot('darlehen_div', [zinsen, tilgung], layout, {responsive: true});
   }
 }
