@@ -413,12 +413,12 @@ export default class ReturnCalculator {
     };
 
     var layout = {
-      title: 'Darlehensverlauf bei ' + (100*zinssatz).toFixed(2) + "% Zinsen und " + (100*tilgungssatz).toFixed(1) + "% Tilgung p.a.",
+      title: 'Darlehenrückzahlverlauf',
       xaxis: {
         title: 'Jahr',
       },
       yaxis: {
-        title: 'Rückzahlrate in %',
+        title: 'Rückzahlrate in €',
       },
       paper_bgcolor: 'rgba(255,255,255, 0)',
       plot_bgcolor: 'rgba(0,0,0,0.1)',
