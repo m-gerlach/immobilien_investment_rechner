@@ -197,7 +197,7 @@ export default class ReturnCalculator {
     // Either compute the sollzins from the eigenkapitalanteil or take the given function argument
     var zinssatz = 0;
     if(sollzinssatz_in_prozent == null)
-      zinssatz = SollzinsRechner.zins_pro_eigenkapitalanteil(eigenkapital/this.input.netto_kaufpreis);
+      zinssatz = SollzinsRechner.zins_pro_eigenkapitalanteil(Math.max(eigenkapital - this.input.zusätzliche_erhaltungsaufwände - this.input.zusätzliche_herstellungsaufwände, 0)/this.input.netto_kaufpreis);
     else
       zinssatz = sollzinssatz_in_prozent/100.;
 
@@ -260,6 +260,7 @@ export default class ReturnCalculator {
     result["investitionsdauer_in_jahren"] = investitionsdauer;
     result["restschulden"] = Math.round(restschulden);
     result["gesamtanschaffungskosten"] = this.compute_gesamt_anschaffungspreis();
+    result["kreditsumme"] = finanzierungsvolumen;
     result["eigenkapital"] = eigenkapital;
     result["cashflow_pa_absolut"] = Math.round(this.sum(cashflow_pro_jahr));
     result["cashflow_pa_relativ"] = 100*this.sum(cashflow_pro_jahr)/eigenkapital/investitionsdauer;
@@ -316,6 +317,23 @@ export default class ReturnCalculator {
         color: 'rgba(255,255,255,255)'
       },
       autosize: true,
+
+      shapes: [
+        {
+          type: 'rect',
+          xref: 'x',
+          yref: 'y',
+          x0: 0,
+          y0: -100,
+          x1: this.compute_gesamt_anschaffungspreis()-this.input.netto_kaufpreis,
+          y1: 100,
+          line: {
+            color: 'rgb(200, 50, 0)',
+            width: 0
+          },
+          fillcolor: 'rgba(255, 50, 0, 0.2)'
+        },
+      ]
     };
 
     Plotly.newPlot('rendite_div', [trace], layout, {responsive: true});
@@ -340,7 +358,16 @@ export default class ReturnCalculator {
     document.getElementById("einzelfallrechner_anschaffungspreis_in_jahreskaltmieten").innerHTML = Number(details["anschaffungspreis_in_jahreskaltmieten"]).toLocaleString('de-DE', { maximumFractionDigits: 1}) + " Jahreskaltmieten";
     document.getElementById("einzelfallrechner_restschulden").innerHTML = Number(details["restschulden"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
     document.getElementById("einzelfallrechner_gesamtanschaffungskosten").innerHTML = Number(details["gesamtanschaffungskosten"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
+    document.getElementById("einzelfallrechner_kreditsumme").innerHTML = Number(details["kreditsumme"]).toLocaleString('de-DE', { maximumFractionDigits: 0}) + "€";
     document.getElementById("einzelfallrechner_result").style.display = '';
+
+    // Zeige Warnung wenn Kaufnebenebenkosten und Instandsetzungen nicht vom Eigenkaipital gedeckt sind.
+    if(this.input.eigenkapital < (this.compute_gesamt_anschaffungspreis()-this.input.netto_kaufpreis)) {
+      document.getElementById("einzelfallrechner_kreditwarnung").style.display = '';
+    }
+    else {
+      document.getElementById("einzelfallrechner_kreditwarnung").style.display = 'none';
+    }
 
     var verlauf_content = ""
 

@@ -201,6 +201,10 @@
               <h3>Ergebnis</h3>
               <div id='rendite_div' class="mx-auto d-block" style="max-width: 70vh;"><!-- Plotly chart will be drawn inside this DIV --></div>
 
+              <div class="p-6 text-center small">
+                <b>Beachte</b>: Viele Banken vergeben nur Kredite wenn mindestens die Kaufnebenkosten und Instandsetzungskosten gedeckt sind.
+              </div>
+
               <hr>
 
               <h3>Details</h3>
@@ -414,6 +418,10 @@
 
             <div class="mt-3 mb-3" id='einzelfallrechner_result' style="display:none; margin-bottom: 50px">
 
+              <div class="alert alert-danger" id='einzelfallrechner_kreditwarnung' style="display:none">
+                <strong>Achtung:</strong> Viele Banken vergeben nur Kredite wenn mindestens die Kaufnebenkosten und Instandsetzungskosten gedeckt sind.
+              </div>
+
               <hr>
 
               <h3>Ergebnis</h3>
@@ -441,17 +449,24 @@
                 </div>
 
                 <div class="col-sm-4">
-                  Restschulden:
-                </div>
-                <div class="col-sm-2">
-                  <div id='einzelfallrechner_restschulden'></div>
-                </div>
-
-                <div class="col-sm-4">
                   Gesamtanschaffungskosten:
                 </div>
                 <div class="col-sm-2">
                   <div id='einzelfallrechner_gesamtanschaffungskosten'></div>
+                </div>
+
+                <div class="col-sm-4">
+                  Kreditsumme:
+                </div>
+                <div class="col-sm-2">
+                  <div id='einzelfallrechner_kreditsumme'></div>
+                </div>
+
+                <div class="col-sm-4">
+                  Restschulden nach Kreditlaufzeit:
+                </div>
+                <div class="col-sm-2">
+                  <div id='einzelfallrechner_restschulden'></div>
                 </div>
 
                 <div class="container-fluid mt-5" >

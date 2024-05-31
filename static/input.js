@@ -227,7 +227,7 @@ export default class Input {
   }
 
   compute_default_sollzins() {
-    return (100*SollzinsRechner.zins_pro_eigenkapitalanteil(this.eigenkapital/this.netto_kaufpreis)).toFixed(2);
+    return (100*SollzinsRechner.zins_pro_eigenkapitalanteil(Math.max(this.eigenkapital - this.zusätzliche_erhaltungsaufwände - this.zusätzliche_herstellungsaufwände, 0)/this.netto_kaufpreis)).toFixed(2);
   }
 
   /**
