@@ -19,11 +19,13 @@ export default class Input {
     this.rücklagen_enthalten_in_kaufpreis               = 0;
     this.zusätzliche_enthaltente_werte_in_kaufpreis     = 0;
     this.notarkosten                                    = 1.5;
-    this.grunderwerbssteuersatz                         = 6;
+    this.grunderwerbssteuersatz                         = 6.5;
     this.set_default_grund_und_bodenwert                = true;
     this.grund_und_bodenwert                            = "";
     this.gewerblich_vermietet                           = false;
     this.denkmalgeschützt                               = false;
+    this.set_default_restnutzungsdauer                  = true;
+    this.restnutzungsdauer                              = 50;
     this.einkommenssteuer_grenzsatz                     = 37;
     this.erwerb_durch_vermögensverwaltende_körperschaft = false;
     this.darlehensrechner_kredit                        = 100000
@@ -82,6 +84,8 @@ export default class Input {
     this.grund_und_bodenwert = Number(document.forms["rendite_pro_eigenkapital_form"]["grund_und_bodenwert"].value);
     this.gewerblich_vermietet = Boolean(document.forms["rendite_pro_eigenkapital_form"]["gewerblich_vermietet"].checked);
     this.denkmalgeschützt = Boolean(document.forms["rendite_pro_eigenkapital_form"]["denkmalgeschützt"].checked);
+    this.set_default_restnutzungsdauer = Boolean(document.forms["rendite_pro_eigenkapital_form"]["set_default_restnutzungsdauer"].checked);
+    this.restnutzungsdauer = Number(document.forms["rendite_pro_eigenkapital_form"]["restnutzungsdauer"].value);
     this.einkommenssteuer_grenzsatz = Number(document.forms["rendite_pro_eigenkapital_form"]["einkommenssteuer_grenzsatz"].value);
     this.erwerb_durch_vermögensverwaltende_körperschaft = Boolean(document.forms["rendite_pro_eigenkapital_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked);
   }
@@ -111,6 +115,8 @@ export default class Input {
     this.grund_und_bodenwert = Number(document.forms["einzelfallrechner_form"]["grund_und_bodenwert"].value);
     this.gewerblich_vermietet = Boolean(document.forms["einzelfallrechner_form"]["gewerblich_vermietet"].checked);
     this.denkmalgeschützt = Boolean(document.forms["einzelfallrechner_form"]["denkmalgeschützt"].checked);
+    this.set_default_restnutzungsdauer = Boolean(document.forms["einzelfallrechner_form"]["set_default_restnutzungsdauer"].checked);
+    this.restnutzungsdauer = Number(document.forms["einzelfallrechner_form"]["restnutzungsdauer"].value);
     this.einkommenssteuer_grenzsatz = Number(document.forms["einzelfallrechner_form"]["einkommenssteuer_grenzsatz"].value);
     this.erwerb_durch_vermögensverwaltende_körperschaft = Boolean(document.forms["einzelfallrechner_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked);
   }
@@ -144,6 +150,29 @@ export default class Input {
       this.grund_und_bodenwert = document.forms[source_form_name]["grund_und_bodenwert"].value;
       document.forms["rendite_pro_eigenkapital_form"]["grund_und_bodenwert"].removeAttribute("disabled");
       document.forms["einzelfallrechner_form"]["grund_und_bodenwert"].removeAttribute("disabled");
+    }
+
+    // Handle set_default_restnutzungsdauer if denkmalgeschützt is activated
+    if(this.denkmalgeschützt) {
+      this.set_default_restnutzungsdauer = true;
+      document.forms["rendite_pro_eigenkapital_form"]["set_default_restnutzungsdauer"].setAttribute("disabled", "");
+      document.forms["einzelfallrechner_form"]["set_default_restnutzungsdauer"].setAttribute("disabled", "");
+    }
+    else {
+      document.forms["rendite_pro_eigenkapital_form"]["set_default_restnutzungsdauer"].removeAttribute("disabled");
+      document.forms["einzelfallrechner_form"]["set_default_restnutzungsdauer"].removeAttribute("disabled");
+    }
+
+    // Handle default restnutzungsdauer
+    if(this.set_default_restnutzungsdauer) {
+      this.restnutzungsdauer = this.compute_default_restnutzungsdauer();
+      document.forms["rendite_pro_eigenkapital_form"]["restnutzungsdauer"].setAttribute("disabled", "");
+      document.forms["einzelfallrechner_form"]["restnutzungsdauer"].setAttribute("disabled", "");
+    }
+    else {
+      this.restnutzungsdauer = document.forms[source_form_name]["restnutzungsdauer"].value;
+      document.forms["rendite_pro_eigenkapital_form"]["restnutzungsdauer"].removeAttribute("disabled");
+      document.forms["einzelfallrechner_form"]["restnutzungsdauer"].removeAttribute("disabled");
     }
 
     // Handle default sollzins
@@ -181,6 +210,8 @@ export default class Input {
     document.forms["rendite_pro_eigenkapital_form"]["grund_und_bodenwert"].value = this.grund_und_bodenwert;
     document.forms["rendite_pro_eigenkapital_form"]["gewerblich_vermietet"].checked = this.gewerblich_vermietet;
     document.forms["rendite_pro_eigenkapital_form"]["denkmalgeschützt"].checked = this.denkmalgeschützt;
+    document.forms["rendite_pro_eigenkapital_form"]["set_default_restnutzungsdauer"].checked = this.set_default_restnutzungsdauer;
+    document.forms["rendite_pro_eigenkapital_form"]["restnutzungsdauer"].value = this.restnutzungsdauer;
     document.forms["rendite_pro_eigenkapital_form"]["einkommenssteuer_grenzsatz"].value = this.einkommenssteuer_grenzsatz;
     document.forms["rendite_pro_eigenkapital_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked = this.erwerb_durch_vermögensverwaltende_körperschaft;
     // einzelfallrechner_form
@@ -206,6 +237,8 @@ export default class Input {
     document.forms["einzelfallrechner_form"]["grund_und_bodenwert"].value = this.grund_und_bodenwert;
     document.forms["einzelfallrechner_form"]["gewerblich_vermietet"].checked = this.gewerblich_vermietet;
     document.forms["einzelfallrechner_form"]["denkmalgeschützt"].checked = this.denkmalgeschützt;
+    document.forms["einzelfallrechner_form"]["set_default_restnutzungsdauer"].checked = this.set_default_restnutzungsdauer;
+    document.forms["einzelfallrechner_form"]["restnutzungsdauer"].value = this.restnutzungsdauer;
     document.forms["einzelfallrechner_form"]["einkommenssteuer_grenzsatz"].value = this.einkommenssteuer_grenzsatz;
     document.forms["einzelfallrechner_form"]["erwerb_durch_vermögensverwaltende_körperschaft"].checked = this.erwerb_durch_vermögensverwaltende_körperschaft;
     // darlehensrechner_form
@@ -224,6 +257,23 @@ export default class Input {
 
   compute_default_grund_und_bodenwert() {
     return 0.2*this.netto_kaufpreis;
+  }
+
+  compute_default_restnutzungsdauer() {
+    // Sonder-AfA Denkmal
+    if(this.denkmalgeschützt){
+      return 13;
+    }
+    // Sonder-AfA Altbau
+    if(this.baujahr < 1925){
+      return 40;
+    }
+    // Sonder-AfA Neubau
+    if(this.baujahr > 2022){
+      return 33;
+    }
+    // Standard-AfA
+    return 50;
   }
 
   compute_default_sollzins() {

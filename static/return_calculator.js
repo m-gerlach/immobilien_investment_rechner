@@ -14,7 +14,7 @@ export default class ReturnCalculator {
    */
   plot_zins_pro_eigenkapitalanteil() {
     var x = Array.from(new Array(100), (x, i) => 0+0.01*i);
-    var y = x.map(SollzinsRechner.zins_pro_eigenkapitalanteil).map((i) => 100*i)
+    var y = x.map(SollzinsRechner.zins_pro_eigenkapitalanteil).map((i) => 100*i);
 
     var trace = {
       x: x,
@@ -53,14 +53,9 @@ export default class ReturnCalculator {
       if(anzahl_jahre_seit_kauf < 13) return 7
       return 0
     }
-    // Altbau
-    if(this.input.baujahr < 1925){
-      if(anzahl_jahre_seit_kauf < 40) return 2.5
-      return 0
+    else {
+      return 100./this.input.restnutzungsdauer;
     }
-    // Neubau
-    if(anzahl_jahre_seit_kauf < 50) return 2
-    return 0
   }
 
   /**
@@ -136,7 +131,7 @@ export default class ReturnCalculator {
    * @returns Anfallende Grunderwerbssteuer beim Immobilienkauf
    */
   compute_grunderwerbssteuer() {
-    return 0.065 * (this.input.netto_kaufpreis - this.input.rücklagen_enthalten_in_kaufpreis - this.input.zusätzliche_enthaltente_werte_in_kaufpreis)
+    return this.input.grunderwerbssteuersatz/100. * (this.input.netto_kaufpreis - this.input.rücklagen_enthalten_in_kaufpreis - this.input.zusätzliche_enthaltente_werte_in_kaufpreis)
   }
 
   /**
@@ -152,11 +147,13 @@ export default class ReturnCalculator {
   }
 
   /**
-   * Reine Erhaltungsaufwände (d.h. keine Herstellungsaufwände) sind sofort voll abzugsfähig solange sie nicht in den ersten drei Jahren nach Kauf der Immobilie 15% des Anschaffungspreises übersteigen.
+   * Reine Erhaltungsaufwände (d.h. keine Herstellungsaufwände) sind sofort voll abzugsfähig solange sie nicht in den ersten drei Jahren nach Kauf der Immobilie 15% der über die AfA absetzbaren Anschaffungskosten (d.h. ohne Grund- und Bodenanteil) übersteigen.
    * @returns Die sofort abzugsfähige Summe aus Erhaltungsaufwänden
    */
   compute_sofort_abschreibbare_erhaltungsaufwände_beim_kauf() {
-    if(this.input.zusätzliche_erhaltungsaufwände > 0.15*(this.input.netto_kaufpreis + (this.input.netto_kaufpreis * this.input.maklercourtage/100.) + (this.input.netto_kaufpreis * this.input.notarkosten/100.))) {
+    const absetzbare_anschaffungskosten = (this.input.netto_kaufpreis * ( 1 + this.input.maklercourtage/100. + this.input.notarkosten/100. ) + this.compute_grunderwerbssteuer()) * ( 1 - this.input.grund_und_bodenwert/this.input.netto_kaufpreis );
+
+    if(this.input.zusätzliche_erhaltungsaufwände > 0.15*absetzbare_anschaffungskosten) {
       return 0;
     }
     else {
@@ -209,7 +206,9 @@ export default class ReturnCalculator {
 
     var mieteinkünfte_pro_jahr = (this.input.erwartete_jahreskaltsmiete - this.input.laufende_kosten_pro_jahr);
     var cashflow_pro_jahr = [];
-    const abschreibbarer_gebäudewert = (anschaffungspreis - this.input.grund_und_bodenwert - this.input.rücklagen_enthalten_in_kaufpreis - sofort_abschreibbare_erhaltungsaufwände_beim_kauf);
+    // Anteil an Grund- und Boden wird von den Gesamtanschaffungskosten abgezogen
+    var grund_und_boden_anteil = this.input.grund_und_bodenwert / this.input.netto_kaufpreis;
+    const abschreibbarer_gebäudewert = (anschaffungspreis*(1-grund_und_boden_anteil) - this.input.rücklagen_enthalten_in_kaufpreis - sofort_abschreibbare_erhaltungsaufwände_beim_kauf);
 
     // Compute progress for each year individually
     for(var jahr in [...Array(investitionsdauer).keys()]) {

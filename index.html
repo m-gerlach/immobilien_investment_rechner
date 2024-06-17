@@ -149,7 +149,7 @@
                   <label for="grunderwerbssteuersatz" title="Grunderwerbssteuersatz des jeweiligen Bundeslandes.">Grunderwerbssteuersatz:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.01" oninput="update_rendite_pro_eigenkapital()"> % vom Kaufpreis
+                  <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.1" oninput="update_rendite_pro_eigenkapital()"> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-4">
@@ -175,6 +175,17 @@
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="denkmalgeschützt" name="denkmalgeschützt" onchange="update_rendite_pro_eigenkapital()">
+                </div>
+
+                <div class="col-sm-4">
+                  <label for="restnutzungsdauer" title="Die Restnutzungsdauer bestimmt das jährliche Abschreibungsvolumen vom Anschaffungspreis.">Restnutzungsdauer:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="set_default_restnutzungsdauer" name="set_default_restnutzungsdauer" onchange="update_rendite_pro_eigenkapital()">
+                  <label for="set_default_restnutzungsdauer" title="Grundsätzlich wird für Immobilien die nach 2023 gebaut wurden eine Afa von 3% (33 Jahre) angenommen. Bei Gebäuden die vor 1925 fertiggestellt wurden ist es 2,5% (40 Jahre) und dazwischen 2% (50 Jahre). Denkmalgeschützte Gebäude haben eine Sonder-AfA die den hier angegebenen Wert überschreibt.">Automatisch füllen</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="restnutzungsdauer" name="restnutzungsdauer" min="0" max="100" step="1" oninput="update_rendite_pro_eigenkapital()"> Jahre
                 </div>
 
                 <div class="col-sm-8">
@@ -371,7 +382,7 @@
                   <label for="grunderwerbssteuersatz" title="Grunderwerbssteuersatz des jeweiligen Bundeslandes.">Grunderwerbssteuersatz:</label>
                 </div>
                 <div class="col-sm-4">
-                  <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.01" oninput="update_einzelfallrechner()"> % vom Kaufpreis
+                  <input type="number" id="grunderwerbssteuersatz" name="grunderwerbssteuersatz" min="0" max="100" step="0.1" oninput="update_einzelfallrechner()"> % vom Kaufpreis
                 </div>
 
                 <div class="col-sm-4">
@@ -397,6 +408,17 @@
                 </div>
                 <div class="col-sm-4">
                   <input type="checkbox" id="denkmalgeschützt" name="denkmalgeschützt" onchange="update_einzelfallrechner()">
+                </div>
+
+                <div class="col-sm-4">
+                  <label for="restnutzungsdauer" title="Die Restnutzungsdauer bestimmt das jährliche Abschreibungsvolumen vom Anschaffungspreis.">Restnutzungsdauer:</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="checkbox" id="set_default_restnutzungsdauer" name="set_default_restnutzungsdauer" onchange="update_einzelfallrechner()">
+                  <label for="set_default_restnutzungsdauer" title="Grundsätzlich wird für Immobilien die nach 2023 gebaut wurden eine Afa von 3% (33 Jahre) angenommen. Bei Gebäuden die vor 1925 fertiggestellt wurden ist es 2,5% (40 Jahre) und dazwischen 2% (50 Jahre). Denkmalgeschützte Gebäude haben eine Sonder-AfA die den hier angegebenen Wert überschreibt.">Automatisch füllen</label>
+                </div>
+                <div class="col-sm-4">
+                  <input type="number" id="restnutzungsdauer" name="restnutzungsdauer" min="0" max="100" step="1" oninput="update_einzelfallrechner()"> Jahre
                 </div>
 
                 <div class="col-sm-8">
