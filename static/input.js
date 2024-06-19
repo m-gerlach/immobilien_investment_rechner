@@ -291,19 +291,36 @@ export default class Input {
    * Load fields from session storage.
   */
  load() {
-    // Try loading input from session storage
-    var loaded_input = null;
-    try {
-      loaded_input = JSON.parse(sessionStorage.getItem('input'));
+   var loaded_input = null;
+   try {
+     // Try loading input from session storage
+     loaded_input = JSON.parse(sessionStorage.getItem('input'));
     }
-    catch(e){ return; }
-    if(loaded_input == null) { return; }
+    catch(e){}
 
-    // Set individual fields
-    for(var key in this) {
-      if(loaded_input[key] != null) {
-        this[key] = loaded_input[key];
+    if(loaded_input == null) {
+      loaded_input = {};
+    }
+
+    // Override cached values with those from URL
+    const entries = Array.from((new URL(window.location.href)).searchParams.entries());
+    (new URL(window.location.href)).searchParams.forEach(function(val, key){
+      // Interprete boolean and nubers accordingly
+      if(val == "true"){ val = true; }
+      else if(val == "false"){ val = false; }
+      else { val = Number(val); }
+      // console.log("URL param " + key + " = " + val);
+      loaded_input[key] = val;
+    });
+
+    if(loaded_input) {
+      // Set individual fields
+      for(var key in this) {
+        if(loaded_input[key] != null) {
+          this[key] = loaded_input[key];
+        }
       }
     }
+    this.show();
   }
 }

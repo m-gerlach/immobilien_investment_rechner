@@ -35,8 +35,19 @@ window.compute_rendite_pro_eigenkapital = function() {
 
 // make `compute_einzelfall()` function available in HTML
 window.compute_einzelfall = function() {
+  console.log(window.location.origin + window.location.pathname + "?" + new URLSearchParams(input).toString());
   const return_calculator = new ReturnCalculator(input);
   return_calculator.display_timeline_for_fixed_eigenkapital();
+}
+
+
+// make `copy_link_to_clipboard()` function available in HTML
+window.copy_link_to_clipboard = function() {
+  const url = window.location.origin + window.location.pathname + "?" + new URLSearchParams(input).toString();
+  // Copy the text inside the text field
+  navigator.clipboard.writeText(url);
+  // Alert the copied text
+  alert("URL kopiert!");
 }
 
 // make `prepare_rendite_pro_eigenkapital()` function available in HTML
