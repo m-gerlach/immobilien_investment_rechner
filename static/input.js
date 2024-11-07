@@ -181,7 +181,7 @@ export default class Input {
       document.forms["einzelfallrechner_form"]["sollzins"].setAttribute("disabled", "");
     }
     else {
-      this.sollzins = document.forms[source_form_name]["sollzins"].value;
+      this.sollzins = document.forms["einzelfallrechner_form"]["sollzins"].value;
       document.forms["einzelfallrechner_form"]["sollzins"].removeAttribute("disabled");
     }
   }
