@@ -14,6 +14,12 @@ window.onload = function(){
   const return_calculator = new ReturnCalculator(input);
   return_calculator.plot_zins_pro_eigenkapitalanteil();
   return_calculator.display_darlehensverlauf();
+
+  // Reload page to clear URL from input.
+  // Note: the input is cached at this point.
+  if(window.location.href.includes("?")) {
+    window.location.href = window.location.pathname
+  }
 }
 
 // make `update()` function available in HTML
